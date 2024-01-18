@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { FONTS } from './src/constants'
+import { FONTS } from '@/constants'
 
 function App(): React.JSX.Element {
   return (
