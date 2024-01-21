@@ -18,11 +18,13 @@ export const Row = ({ children, justify = 'center', styles, onPress }: RowProps)
     styles
   ]
 
-  return onPress ? (
-    <TouchableOpacity style={localStyle} onPress={onPress}>
-      {children}
-    </TouchableOpacity>
-  ) : (
-    <View style={localStyle}>{children}</View>
-  )
+  if (onPress) {
+    return (
+      <TouchableOpacity style={localStyle} onPress={onPress}>
+        {children}
+      </TouchableOpacity>
+    )
+  }
+
+  return <View style={localStyle}>{children}</View>
 }

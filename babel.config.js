@@ -19,6 +19,7 @@ module.exports = {
           '@/navigation': './src/navigation'
         }
       }
-    ]
+    ],
+    'react-native-reanimated/plugin'
   ]
 }

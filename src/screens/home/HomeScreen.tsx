@@ -1,7 +1,9 @@
+import { Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
-import { Row, Section, AppText, Container, Title, Card } from '@/components'
+import { AppText, Card, Circular, Container, Row, Section, Space, Tag, Title } from '@/components'
+import { COLORS } from '@/constants'
 import { globalStyles } from '@/styles'
 
 export const HomeScreen = () => {
@@ -9,8 +11,8 @@ export const HomeScreen = () => {
     <Container>
       <Section>
         <Row justify="space-between">
-          <AppText text="HomeScreen" />
-          <AppText text="HomeScreen" />
+          <Element4 size={24} color={COLORS.desc} />
+          <Notification size={24} color={COLORS.desc} />
         </Row>
       </Section>
 
@@ -21,8 +23,8 @@ export const HomeScreen = () => {
 
       <Section>
         <Row styles={[globalStyles.inputContainer]} onPress={() => {}}>
-          <AppText text="Search" />
-          <Text>S</Text>
+          <AppText color="#696B6F" text="Search tasks" />
+          <SearchNormal1 size={20} color={COLORS.desc} />
         </Row>
       </Section>
 
@@ -32,11 +34,15 @@ export const HomeScreen = () => {
             <View style={{ flex: 1 }}>
               <Title text="Task progress" />
               <AppText text="30/40 tasks done" />
-              <AppText text="tag" />
+              <Space height={12} />
+
+              <Row justify="flex-start">
+                <Tag text="March 22" onPress={() => console.log('Say hi!!!')} />
+              </Row>
             </View>
 
             <View>
-              <AppText text="CircleChar" />
+              <Circular value={80} />
             </View>
           </Row>
         </Card>
