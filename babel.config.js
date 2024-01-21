@@ -13,9 +13,7 @@ module.exports = {
           '@/screens': './src/screens',
           '@/styles': './src/styles',
           '@/routes': './src/routes',
-          '@/services': './src/services',
           '@/hooks': './src/hooks',
-          '@/shared': './src/shared',
           '@/utils': './src/utils',
           '@/models': './src/models',
           '@/navigation': './src/navigation'

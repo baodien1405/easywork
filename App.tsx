@@ -1,27 +1,15 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { FONTS } from '@/constants'
+import { StatusBar } from 'react-native'
 
-function App(): React.JSX.Element {
+import { HomeScreen } from '@/screens/home'
+
+function App() {
   return (
-    <View style={[styles.container]}>
-      <Text style={styles.title}>Easywork</Text>
-    </View>
+    <>
+      <StatusBar translucent barStyle={'light-content'} backgroundColor="transparent" />
+      <HomeScreen />
+    </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'coral'
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: FONTS.bold,
-    color: 'white'
-  }
-})
 
 export default App
