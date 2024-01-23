@@ -4,9 +4,7 @@ import { Platform, StyleSheet } from 'react-native'
 export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.bgColor,
-    padding: 20,
-    paddingTop: Platform.OS === 'ios' ? 52 : 42
+    backgroundColor: COLORS.bgColor
   },
   row: {
     flexDirection: 'row',
@@ -25,12 +23,25 @@ export const globalStyles = StyleSheet.create({
     paddingVertical: Platform.OS === 'ios' ? 12 : 10
   },
   section: {
-    marginBottom: 16
+    marginBottom: 16,
+    paddingHorizontal: 20
   },
   tag: {
     paddingHorizontal: 20,
     paddingVertical: Platform.OS === 'ios' ? 6 : 4,
     backgroundColor: COLORS.blue,
     borderRadius: 100
+  },
+  card: {
+    borderRadius: 12
+  },
+  iconContainer: {
+    height: 40,
+    width: 40,
+    borderRadius: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16
   }
 })

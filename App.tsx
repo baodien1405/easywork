@@ -1,14 +1,14 @@
 import React from 'react'
-import { StatusBar } from 'react-native'
+import { SafeAreaView } from 'react-native'
 
 import { HomeScreen } from '@/screens/home'
 
 function App() {
   return (
-    <>
-      <StatusBar translucent barStyle={'light-content'} backgroundColor="transparent" />
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <StatusBar translucent barStyle={'light-content'} backgroundColor="transparent" /> */}
       <HomeScreen />
-    </>
+    </SafeAreaView>
   )
 }
 
