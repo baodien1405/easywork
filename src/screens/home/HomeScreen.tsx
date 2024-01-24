@@ -16,10 +16,11 @@ import {
   Tag,
   Title
 } from '@/components'
-import { COLORS, FONT_FAMILIES } from '@/constants'
+import { COLORS, FONT_FAMILIES, SCREENS } from '@/constants'
 import { globalStyles } from '@/styles'
+import { HomeScreenProps } from '@/models'
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <View style={{ flex: 1 }}>
       <Container>
@@ -119,7 +120,11 @@ export const HomeScreen = () => {
       </Container>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity activeOpacity={1} style={[globalStyles.row, styles.button]}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={[globalStyles.row, styles.button]}
+          onPress={() => navigation.navigate(SCREENS.ADD_EDIT_TASK_SCREEN)}
+        >
           <AppText text="Add new task" flex={0} />
           <Add size={22} color={COLORS.white1} />
         </TouchableOpacity>
@@ -141,9 +146,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   button: {
-    backgroundColor: 'coral',
+    backgroundColor: '#3618e0',
     padding: 10,
-    borderRadius: 100,
+    borderRadius: 12,
     width: '80%'
   }
 })

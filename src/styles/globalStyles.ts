@@ -4,7 +4,8 @@ import { Platform, StyleSheet } from 'react-native'
 export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.bgColor
+    backgroundColor: COLORS.bgColor,
+    paddingTop: 20
   },
   row: {
     flexDirection: 'row',
@@ -20,7 +21,7 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: COLORS.gray,
     borderRadius: 12,
     paddingHorizontal: Platform.OS === 'ios' ? 12 : 10,
-    paddingVertical: Platform.OS === 'ios' ? 12 : 10
+    paddingVertical: 12
   },
   section: {
     marginBottom: 16,

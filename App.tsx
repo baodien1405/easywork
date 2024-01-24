@@ -1,13 +1,17 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, StatusBar } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
 
-import { HomeScreen } from '@/screens/home'
+import { COLORS } from '@/constants'
+import { Routes } from '@/routes'
 
 function App() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {/* <StatusBar translucent barStyle={'light-content'} backgroundColor="transparent" /> */}
-      <HomeScreen />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bgColor }}>
+      <StatusBar translucent barStyle={'light-content'} backgroundColor={COLORS.bgColor} />
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
     </SafeAreaView>
   )
 }
