@@ -5,5 +5,6 @@ export const COLORS = {
   text: '#ffffff',
   desc: '#e6e6e6',
   blue: '#3618e0b3',
-  white1: '#fafafa'
+  white1: '#fafafa',
+  error: 'red'
 }

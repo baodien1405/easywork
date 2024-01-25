@@ -1,12 +1,11 @@
 import React from 'react'
-import { Text } from 'react-native'
 
-import { Container } from '@/components'
+import { Container, TaskForm } from '@/components'
 
 export function AddEditTask() {
   return (
     <Container back title="Add new task">
-      <Text>AddEditTask</Text>
+      <TaskForm />
     </Container>
   )
 }
