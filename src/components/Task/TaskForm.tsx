@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { AppText, Section } from '@/components'
-import { InputField } from '@/components/FormFields'
+import { DatePickerField, InputField } from '@/components/FormFields'
 import { COLORS } from '@/constants'
 import { useTaskSchema } from '@/hooks'
 import { globalStyles } from '@/styles'
@@ -52,6 +52,14 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
         allowClear
         multiline
         numberOfLines={3}
+      />
+
+      <DatePickerField
+        name="dueDate"
+        control={control}
+        type="date"
+        label="Due date"
+        placeholder="Select date"
       />
 
       <View style={styles.buttonContainer}>

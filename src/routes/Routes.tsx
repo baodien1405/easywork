@@ -2,7 +2,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { HomeScreen } from '@/screens/home'
-import { AddEditTask } from '@/screens/tasks'
+import { AddEditTaskScreen } from '@/screens/tasks'
 import { SCREENS } from '@/constants'
 import { RootStackParamList } from '@/models'
 
@@ -16,7 +16,7 @@ export function Routes() {
       }}
     >
       <Stack.Screen name={SCREENS.HOME_SCREEN} component={HomeScreen} />
-      <Stack.Screen name={SCREENS.ADD_EDIT_TASK_SCREEN} component={AddEditTask} />
+      <Stack.Screen name={SCREENS.ADD_EDIT_TASK_SCREEN} component={AddEditTaskScreen} />
     </Stack.Navigator>
   )
 }
