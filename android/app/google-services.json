@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "210217792130",
+    "project_id": "easywork-fb651",
+    "storage_bucket": "easywork-fb651.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210217792130:android:3ccac8c59b06b3a1e3ba9b",
+        "android_client_info": {
+          "package_name": "com.easywork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWwfERg9XE76OhOCxHXCfbaDRNsrUAm3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
