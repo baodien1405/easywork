@@ -4,9 +4,9 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
 
-import { AppText, Section } from '@/components'
+import { AppText, Row, Section, Space } from '@/components'
 import { DatePickerField, InputField } from '@/components/FormFields'
-import { COLORS } from '@/constants'
+import { COLORS, FORMAT_TYPES } from '@/constants'
 import { useTaskSchema } from '@/hooks'
 import { globalStyles } from '@/styles'
 import { Task } from '@/models'
@@ -61,6 +61,32 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
         label="Due date"
         placeholder="Select date"
       />
+
+      <Row>
+        <View style={globalStyles.flex1}>
+          <DatePickerField
+            name="start"
+            control={control}
+            type="time"
+            label="Start"
+            format={FORMAT_TYPES.TIME}
+            placeholder="Select date"
+          />
+        </View>
+
+        <Space width={16} />
+
+        <View style={globalStyles.flex1}>
+          <DatePickerField
+            name="end"
+            control={control}
+            type="time"
+            label="Date"
+            format={FORMAT_TYPES.TIME}
+            placeholder="Select date"
+          />
+        </View>
+      </Row>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity

@@ -44,5 +44,8 @@ export const globalStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16
+  },
+  flex1: {
+    flex: 1
   }
 })

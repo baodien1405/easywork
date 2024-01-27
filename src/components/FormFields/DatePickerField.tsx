@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import { ArrowDown2 } from 'iconsax-react-native'
 import DatePicker from 'react-native-date-picker'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+import dayjs from 'dayjs'
 
 import { AppText, Row, Space, Title } from '@/components'
 import { globalStyles } from '@/styles'
-import { COLORS } from '@/constants'
-import { formatDate } from '@/utils'
+import { COLORS, FORMAT_TYPES } from '@/constants'
 
 type DatePickerFieldProps<T extends FieldValues> = {
   label?: string
@@ -16,6 +16,7 @@ type DatePickerFieldProps<T extends FieldValues> = {
   locale?: string
   name: Path<T>
   control: Control<T>
+  format?: string
 
   onDateChange?: (date: Date) => void
 }
@@ -27,6 +28,7 @@ export function DatePickerField<T extends FieldValues>({
   type,
   placeholder,
   locale = 'vi',
+  format = FORMAT_TYPES.DATE,
   onDateChange: externalOnDateChange
 }: DatePickerFieldProps<T>) {
   const [visible, setVisible] = useState(false)
@@ -39,7 +41,7 @@ export function DatePickerField<T extends FieldValues>({
     control
   })
 
-  const dateString = value ? formatDate(value) : placeholder ? placeholder : ''
+  const dateString = value ? dayjs(value).format(format) : placeholder ? placeholder : ''
 
   return (
     <>
@@ -47,10 +49,7 @@ export function DatePickerField<T extends FieldValues>({
         {label && <Title text={label} styles={styles.label} />}
 
         <View ref={ref}>
-          <Row
-            styles={[globalStyles.inputContainer, { paddingVertical: 20 }]}
-            onPress={() => setVisible(true)}
-          >
+          <Row styles={[globalStyles.inputContainer, styles.row]} onPress={() => setVisible(true)}>
             <AppText text={dateString} color={value ? COLORS.text : '#676767'} />
 
             <ArrowDown2 size={20} color={COLORS.text} />
@@ -65,7 +64,7 @@ export function DatePickerField<T extends FieldValues>({
           <View style={styles.modalInner}>
             <Title text="Date time picker" color={COLORS.text} />
 
-            <View style={{ marginBottom: 16 }}>
+            <View style={styles.datePickerContainer}>
               <DatePicker
                 mode={type}
                 date={value || new Date()}
@@ -110,6 +109,9 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 8
   },
+  row: {
+    paddingVertical: 20
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -122,6 +124,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white1,
     padding: 20,
     borderRadius: 20
+  },
+  datePickerContainer: {
+    marginBottom: 16
   },
   buttonContainer: {
     alignItems: 'center'
