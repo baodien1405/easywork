@@ -10,6 +10,7 @@ interface AppTextProps {
   color?: string
   flex?: number
   styles?: StyleProp<TextStyle>
+  onPress?: () => void
 }
 
 export function AppText({
@@ -18,7 +19,8 @@ export function AppText({
   font = FONT_FAMILIES.regular,
   color = COLORS.desc,
   flex = 1,
-  styles
+  styles,
+  onPress
 }: AppTextProps) {
   return (
     <Text
@@ -32,6 +34,7 @@ export function AppText({
         },
         styles
       ]}
+      onPress={onPress}
     >
       {text}
     </Text>

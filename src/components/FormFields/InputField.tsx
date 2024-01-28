@@ -1,7 +1,15 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native'
+import React, { ReactNode, useState } from 'react'
+import {
+  KeyboardTypeOptions,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+import { Eye, EyeSlash } from 'iconsax-react-native'
 
 import { AppText, Row, Title } from '@/components'
 import { globalStyles } from '@/styles'
@@ -15,6 +23,8 @@ type InputFieldProps<T extends FieldValues> = TextInputProps & {
   allowClear?: boolean
   name: Path<T>
   control: Control<T>
+  type?: KeyboardTypeOptions
+  isPassword?: boolean
 }
 
 export function InputField<T extends FieldValues>({
@@ -27,6 +37,8 @@ export function InputField<T extends FieldValues>({
   allowClear,
   multiline,
   numberOfLines,
+  type,
+  isPassword = false,
   onChangeText: externalOnChangeText,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onBlur: externalOnBlur,
@@ -34,6 +46,8 @@ export function InputField<T extends FieldValues>({
   value: externalValue,
   ...rest
 }: InputFieldProps<T>) {
+  const [showPassword, setShowPassword] = useState(false)
+
   const {
     field: { onBlur, onChange, value, ref },
     fieldState: { error }
@@ -74,6 +88,9 @@ export function InputField<T extends FieldValues>({
             multiline={multiline}
             numberOfLines={numberOfLines}
             ref={ref}
+            keyboardType={type}
+            secureTextEntry={isPassword ? !showPassword : false}
+            autoCapitalize="none"
             onBlur={onBlur}
             onChangeText={(text) => {
               onChange(text)
@@ -85,9 +102,19 @@ export function InputField<T extends FieldValues>({
 
         {suffix && <View>{suffix}</View>}
 
-        {allowClear && (
-          <TouchableOpacity>
+        {allowClear && value && (
+          <TouchableOpacity onPress={() => onChange('')}>
             <AntDesign name="close" size={20} color={COLORS.white1} />
+          </TouchableOpacity>
+        )}
+
+        {isPassword && (
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            {showPassword ? (
+              <EyeSlash size={20} color={COLORS.desc} />
+            ) : (
+              <Eye size={20} color={COLORS.desc} />
+            )}
           </TouchableOpacity>
         )}
       </Row>

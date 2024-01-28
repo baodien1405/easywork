@@ -13,9 +13,10 @@ interface ContainerProps {
   back?: boolean
   right?: ReactNode
   children: ReactNode
+  isScroll?: boolean
 }
 
-export const Container = ({ back, title, children }: ContainerProps) => {
+export const Container = ({ back, title, children, isScroll }: ContainerProps) => {
   const navigation = useNavigation()
 
   return (
@@ -39,7 +40,11 @@ export const Container = ({ back, title, children }: ContainerProps) => {
         </View>
       </Row>
 
-      <ScrollView style={{ flex: 1 }}>{children}</ScrollView>
+      {isScroll ? (
+        <ScrollView style={globalStyles.flex1}>{children}</ScrollView>
+      ) : (
+        <View style={globalStyles.flex1}>{children}</View>
+      )}
     </View>
   )
 }

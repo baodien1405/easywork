@@ -19,5 +19,5 @@ export function Title({
   font = FONT_FAMILIES.semibold,
   styles
 }: TitleProps) {
-  return <AppText text={text} size={size} color={color} font={font} styles={styles} />
+  return <AppText text={text} size={size} color={color} font={font} styles={styles} flex={0} />
 }
