@@ -36,7 +36,7 @@ export function SignUpForm({ initialValues, onSubmit }: SignUpFormProps) {
   return (
     <View>
       <InputField
-        name="fullName"
+        name="name"
         control={control}
         label="Name"
         placeholder="Name"
@@ -45,9 +45,9 @@ export function SignUpForm({ initialValues, onSubmit }: SignUpFormProps) {
       />
 
       <InputField
-        name="username"
+        name="email"
         control={control}
-        label="Username"
+        label="Email"
         placeholder="abc@gmail.com"
         prefix={<Sms size={22} color={COLORS.white1} />}
         allowClear

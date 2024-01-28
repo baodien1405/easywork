@@ -119,7 +119,9 @@ export function InputField<T extends FieldValues>({
         )}
       </Row>
 
-      {error?.message && <AppText text={error.message} color={COLORS.error} />}
+      {error?.message && (
+        <AppText text={error.message} color={COLORS.error} flex={0} styles={styles.errorMessage} />
+      )}
     </View>
   )
 }
@@ -137,5 +139,8 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     flex: 1,
     textAlignVertical: 'top'
+  },
+  errorMessage: {
+    marginTop: 8
   }
 })

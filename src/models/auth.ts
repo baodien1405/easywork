@@ -6,11 +6,11 @@ export type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login
 export type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUpScreen'>
 
 export interface LoginPayload {
-  username: string
+  email: string
   password: string
 }
 export interface SignUpPayload {
-  username: string
+  email: string
   password: string
-  fullName: string
+  name: string
 }

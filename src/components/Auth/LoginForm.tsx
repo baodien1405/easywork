@@ -36,9 +36,9 @@ export function LoginForm({ initialValues, onSubmit }: LoginFormProps) {
   return (
     <View>
       <InputField
-        name="username"
+        name="email"
         control={control}
-        label="Username"
+        label="Email"
         placeholder="abc@gmail.com"
         prefix={<Sms size={22} color={COLORS.white1} />}
         allowClear

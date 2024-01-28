@@ -2,14 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { User } from 'iconsax-react-native'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { View } from 'react-native'
 
-import { AppText, Row, Section, Space } from '@/components'
+import { AppButton, Row, Section, Space } from '@/components'
 import { DatePickerField, InputField } from '@/components/FormFields'
 import { COLORS, FORMAT_TYPES } from '@/constants'
 import { useTaskSchema } from '@/hooks'
-import { globalStyles } from '@/styles'
 import { Task } from '@/models'
+import { globalStyles } from '@/styles'
 
 interface TaskFormProps {
   initialValues?: Task
@@ -88,27 +88,12 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
         </View>
       </Row>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={[globalStyles.row, styles.button]}
-          onPress={handleSubmit(handleFormSubmit)}
-        >
-          {isSubmitting ? <ActivityIndicator size={20} /> : <AppText text="Add" flex={0} />}
-        </TouchableOpacity>
-      </View>
+      <AppButton
+        text="Add"
+        onPress={handleSubmit(handleFormSubmit)}
+        loading={isSubmitting}
+        styles={{ marginTop: 20 }}
+      />
     </Section>
   )
 }
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    alignItems: 'center'
-  },
-  button: {
-    backgroundColor: '#3618e0',
-    padding: 10,
-    borderRadius: 12,
-    width: '100%'
-  }
-})

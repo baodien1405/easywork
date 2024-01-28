@@ -1,17 +1,24 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import auth from '@react-native-firebase/auth'
 
 import { AppText, Container, LoginForm, Row, Section, Space, Title } from '@/components'
 import { FONT_FAMILIES, SCREENS } from '@/constants'
-import { LoginScreenProps } from '@/models'
+import { LoginPayload, LoginScreenProps } from '@/models'
 
 export function LoginScreen({ navigation }: LoginScreenProps) {
+  const handleLogin = async (payload: LoginPayload) => {
+    try {
+      await auth().signInWithEmailAndPassword(payload.email, payload.password)
+    } catch (error) {}
+  }
+
   return (
     <Container>
       <Section styles={styles.section}>
         <Title text="Login" size={32} font={FONT_FAMILIES.bold} styles={styles.title} />
 
-        <LoginForm />
+        <LoginForm onSubmit={handleLogin} />
 
         <Space height={20} />
 

@@ -5,9 +5,9 @@ export const useSignUpSchema = () => {
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   const schema = yup.object().shape({
-    username: yup
+    email: yup
       .string()
-      .required('Please enter a username or email')
+      .required('Please enter an email')
       .email('Please enter a valid email')
       .matches(emailRegex, { message: 'Please enter a valid email' })
       .trim('Please enter a suffix with no leading or trailing spaces'),
@@ -16,9 +16,9 @@ export const useSignUpSchema = () => {
       .required('Please enter a password')
       .trim('Please enter a suffix with no leading or trailing spaces')
       .min(6, 'Password is required to have at least 6 characters'),
-    fullName: yup
+    name: yup
       .string()
-      .required('Please enter a password')
+      .required('Please enter a name')
       .trim('Please enter a suffix with no leading or trailing spaces')
   })
   return schema

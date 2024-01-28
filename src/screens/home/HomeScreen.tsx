@@ -1,6 +1,7 @@
-import { Add, Edit2, Element4, Notification, SearchNormal1 } from 'iconsax-react-native'
+import { Add, Edit2, Element4, Logout, Notification, SearchNormal1 } from 'iconsax-react-native'
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import auth from '@react-native-firebase/auth'
 
 import {
   AppText,
@@ -21,9 +22,11 @@ import { globalStyles } from '@/styles'
 import { HomeScreenProps } from '@/models'
 
 export const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  const user = auth().currentUser
+
   return (
-    <View style={{ flex: 1 }}>
-      <Container>
+    <View style={styles.flex1}>
+      <Container isScroll>
         <Section>
           <Row justify="space-between">
             <Element4 size={24} color={COLORS.desc} />
@@ -32,8 +35,16 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </Section>
 
         <Section>
-          <AppText text="Hi, Jason" />
-          <Title text="Be Productive today" />
+          <Row styles={{ justifyContent: 'space-between' }}>
+            <View>
+              <AppText text={`Hi, ${user?.email}`} />
+              <Title text="Be Productive today" />
+            </View>
+
+            <TouchableOpacity onPress={() => auth().signOut()}>
+              <Logout size={20} color={COLORS.error} />
+            </TouchableOpacity>
+          </Row>
         </Section>
 
         <Section>

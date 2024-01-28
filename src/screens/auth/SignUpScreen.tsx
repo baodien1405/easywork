@@ -1,17 +1,24 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
+import auth from '@react-native-firebase/auth'
 
 import { AppText, Container, Row, Section, SignUpForm, Space, Title } from '@/components'
 import { FONT_FAMILIES, SCREENS } from '@/constants'
-import { SignUpScreenProps } from '@/models'
+import { SignUpPayload, SignUpScreenProps } from '@/models'
 
 export function SignUpScreen({ navigation }: SignUpScreenProps) {
+  const handleSignUp = async (payload: SignUpPayload) => {
+    try {
+      await auth().createUserWithEmailAndPassword(payload.email, payload.password)
+    } catch (error) {}
+  }
+
   return (
     <Container>
       <Section styles={styles.section}>
         <Title text="Sign up" size={32} font={FONT_FAMILIES.bold} styles={styles.title} />
 
-        <SignUpForm />
+        <SignUpForm onSubmit={handleSignUp} />
 
         <Space height={20} />
 
