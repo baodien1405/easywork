@@ -4,4 +4,6 @@ export interface Task {
   dueDate: Date
   start: Date
   end: Date
+  members?: any
+  search?: string
 }

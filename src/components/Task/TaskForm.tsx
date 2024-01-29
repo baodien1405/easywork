@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 
 import { AppButton, Row, Section, Space } from '@/components'
-import { DatePickerField, InputField } from '@/components/FormFields'
+import { DatePickerField, DropdownPickerField, InputField } from '@/components/FormFields'
 import { COLORS, FORMAT_TYPES } from '@/constants'
 import { useTaskSchema } from '@/hooks'
-import { Task } from '@/models'
+import { Option, Task } from '@/models'
 import { globalStyles } from '@/styles'
+import { useUserList } from '@/hooks/fetchers'
 
 interface TaskFormProps {
   initialValues?: Task
@@ -28,6 +29,12 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
     },
     resolver: yupResolver(schema)
   })
+
+  const { data: userList } = useUserList()
+  const memberOptions: Option[] = userList.map((user) => ({
+    label: user.name,
+    value: user.id
+  }))
 
   const handleFormSubmit = async (formValues: Task) => {
     await onSubmit?.(formValues)
@@ -87,6 +94,14 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
           />
         </View>
       </Row>
+
+      <DropdownPickerField
+        name="members"
+        control={control}
+        label="Members"
+        items={memberOptions}
+        multiple
+      />
 
       <AppButton
         text="Add"
