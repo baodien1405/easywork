@@ -67,7 +67,9 @@ export function InputField<T extends FieldValues>({
             minHeight: multiline && numberOfLines ? 32 * numberOfLines : 32,
             paddingVertical: 14,
             paddingHorizontal: 10,
-            alignItems: multiline && numberOfLines ? 'flex-start' : 'center'
+            alignItems: multiline && numberOfLines ? 'flex-start' : 'center',
+            borderWidth: 0.5,
+            borderColor: error?.message ? COLORS.error : COLORS.gray2
           }
         ]}
       >

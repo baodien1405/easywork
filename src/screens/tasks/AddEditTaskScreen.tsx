@@ -9,7 +9,7 @@ export function AddEditTaskScreen() {
   }
 
   return (
-    <Container back title="Add new task">
+    <Container back title="Add new task" isScroll>
       <TaskForm onSubmit={handleTaskSubmit} />
     </Container>
   )

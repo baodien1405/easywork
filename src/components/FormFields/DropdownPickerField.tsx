@@ -33,76 +33,72 @@ export function DropdownPickerField<T extends FieldValues>({
 }: DropdownPickerFieldProps<T>) {
   const [isVisible, setIsVisible] = useState(false)
   const [searchText, setSearchText] = useState('')
-  const [selectedUserIdList, setSelectedUserIdList] = useState<string[]>([])
 
   const filteredItems = items.filter((x) =>
     x.label.toLowerCase().includes(searchText.toLowerCase())
   )
 
   const {
-    field: { onChange },
+    field: { onChange, value },
     fieldState: { error }
   } = useController({
     name,
     control
   })
 
+  const selectedIdList: string[] = value || []
+
   const handleSelectUser = (userId: string) => {
     if (multiple) {
-      setSelectedUserIdList((prevState) => {
-        const newUserIdList = [...prevState]
-        const index = newUserIdList.findIndex((id) => id === userId)
+      const newIdList = [...selectedIdList]
+      const index = newIdList.findIndex((id) => id === userId)
 
-        if (index !== -1) {
-          newUserIdList.splice(index, 1)
-        } else {
-          newUserIdList.push(userId)
-        }
+      if (index !== -1) {
+        newIdList.splice(index, 1)
+      } else {
+        newIdList.push(userId)
+      }
 
-        return newUserIdList
-      })
+      onChange(newIdList)
+      externalOnChange?.(newIdList)
     } else {
-      setSelectedUserIdList([userId])
+      onChange([userId])
+      externalOnChange?.([userId])
     }
   }
 
   const handleRemoveSelectedItem = (index: number) => {
-    setSelectedUserIdList((prevState) => {
-      const newUserIdList = [...prevState]
-      newUserIdList.splice(index, 1)
+    const newUserIdList = [...selectedIdList]
+    newUserIdList.splice(index, 1)
 
-      return newUserIdList
-    })
-  }
-
-  const handleConfirm = () => {
-    onChange(selectedUserIdList)
-    externalOnChange?.(selectedUserIdList)
-
-    setIsVisible(false)
+    onChange(newUserIdList)
+    externalOnChange?.(newUserIdList)
   }
 
   return (
     <View style={styles.container}>
       {label && <Title text={label} styles={styles.label} />}
 
-      <Row styles={[globalStyles.inputContainer, styles.row]} onPress={() => setIsVisible(true)}>
-        {selectedUserIdList.length ? (
+      <Row
+        styles={[
+          globalStyles.inputContainer,
+          styles.row,
+          {
+            borderWidth: 0.5,
+            borderColor: error?.message ? COLORS.error : COLORS.gray2
+          }
+        ]}
+        onPress={() => setIsVisible(true)}
+      >
+        {selectedIdList.length ? (
           <Row justify="flex-start" styles={{ flexWrap: 'wrap' }}>
-            {selectedUserIdList.map((id, index) => {
+            {selectedIdList.map((id, index) => {
               const item = items.find((x) => x.value === id)
 
               return (
                 <Row
                   key={id}
-                  styles={{
-                    marginRight: 8,
-                    padding: 4,
-                    borderRadius: 100,
-                    borderWidth: 0.5,
-                    borderColor: COLORS.gray2,
-                    marginBottom: 8
-                  }}
+                  styles={styles.itemContainer}
                   onPress={() => handleRemoveSelectedItem(index)}
                 >
                   <AppText text={item?.label || ''} flex={0} />
@@ -140,7 +136,7 @@ export function DropdownPickerField<T extends FieldValues>({
                     placeholder="Search..."
                     prefix={<SearchNormal1 size={20} color={COLORS.gray2} />}
                     control={control as any}
-                    onChangeText={(value) => setSearchText(value)}
+                    onChangeText={(text) => setSearchText(text)}
                     allowClear
                   />
                 </View>
@@ -154,7 +150,7 @@ export function DropdownPickerField<T extends FieldValues>({
             style={globalStyles.flex1}
             data={filteredItems}
             renderItem={({ item }) => {
-              const isSelected = selectedUserIdList.includes(item.value)
+              const isSelected = selectedIdList.includes(item.value)
 
               return (
                 <Row
@@ -169,7 +165,7 @@ export function DropdownPickerField<T extends FieldValues>({
             }}
           />
 
-          <AppButton text="Confirm" onPress={handleConfirm} />
+          <AppButton text="Confirm" onPress={() => setIsVisible(false)} />
         </View>
       </Modal>
     </View>
@@ -208,5 +204,13 @@ const styles = StyleSheet.create({
   searchContainer: {
     flex: 1,
     marginRight: 12
+  },
+  itemContainer: {
+    marginRight: 8,
+    padding: 4,
+    borderRadius: 100,
+    borderWidth: 0.5,
+    borderColor: COLORS.gray2,
+    marginBottom: 8
   }
 })

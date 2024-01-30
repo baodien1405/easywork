@@ -7,7 +7,11 @@ export const useTaskSchema = () => {
     dueDate: yup.date().required('Please select a date'),
     start: yup.date().required('Please select a date'),
     end: yup.date().required('Please select a date'),
-    members: yup.array().notRequired().of(yup.string()).min(1, 'Please select at least one')
+    members: yup
+      .array()
+      .of(yup.string().required())
+      .min(1, 'Please select at least one')
+      .required('Please select members')
   })
 
   return schema

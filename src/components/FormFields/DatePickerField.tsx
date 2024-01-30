@@ -34,7 +34,7 @@ export function DatePickerField<T extends FieldValues>({
   const [visible, setVisible] = useState(false)
 
   const {
-    field: { onChange, value, ref },
+    field: { onChange, value },
     fieldState: { error }
   } = useController({
     name,
@@ -48,15 +48,30 @@ export function DatePickerField<T extends FieldValues>({
       <View style={styles.container}>
         {label && <Title text={label} styles={styles.label} />}
 
-        <View ref={ref}>
-          <Row styles={[globalStyles.inputContainer, styles.row]} onPress={() => setVisible(true)}>
-            <AppText text={dateString} color={value ? COLORS.text : '#676767'} />
+        <Row
+          styles={[
+            globalStyles.inputContainer,
+            styles.row,
+            {
+              borderWidth: 0.5,
+              borderColor: error?.message ? COLORS.error : COLORS.gray2
+            }
+          ]}
+          onPress={() => setVisible(true)}
+        >
+          <AppText text={dateString} color={value ? COLORS.text : '#676767'} />
 
-            <ArrowDown2 size={20} color={COLORS.text} />
-          </Row>
-        </View>
+          <ArrowDown2 size={20} color={COLORS.text} />
+        </Row>
 
-        {error?.message && <AppText text={error.message} color={COLORS.error} />}
+        {error?.message && (
+          <AppText
+            text={error.message}
+            color={COLORS.error}
+            flex={0}
+            styles={styles.errorMessage}
+          />
+        )}
       </View>
 
       <Modal visible={visible} transparent animationType="slide">
@@ -136,5 +151,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
     width: '45%'
+  },
+  errorMessage: {
+    marginTop: 8
   }
 })
