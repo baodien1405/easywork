@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import auth from '@react-native-firebase/auth'
 
 import {
+  AppButton,
   AppText,
   AvatarGroup,
   Card,
@@ -35,7 +36,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </Section>
 
         <Section>
-          <Row styles={{ justifyContent: 'space-between' }}>
+          <Row justify="space-between">
             <View>
               <AppText text={`Hi, ${user?.email}`} />
               <Title text="Be Productive today" />
@@ -131,14 +132,12 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
       </Container>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={[globalStyles.row, styles.button]}
+        <AppButton
+          text="Add new task"
           onPress={() => navigation.navigate(SCREENS.ADD_EDIT_TASK_SCREEN)}
-        >
-          <AppText text="Add new task" flex={0} />
-          <Add size={22} color={COLORS.white1} />
-        </TouchableOpacity>
+          suffix={<Add size={22} color={COLORS.white1} />}
+          styles={styles.button}
+        />
       </View>
     </View>
   )
@@ -158,8 +157,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#3618e0',
-    padding: 10,
-    borderRadius: 12,
     width: '80%'
   }
 })

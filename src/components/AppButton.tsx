@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
-import { ActivityIndicator, StyleProp, TouchableOpacity, ViewStyle } from 'react-native'
+import { ActivityIndicator, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 
-import { AppText } from '@/components'
+import { AppText, Row } from '@/components'
 import { COLORS } from '@/constants'
 
 interface AppButtonProps {
@@ -10,10 +10,20 @@ interface AppButtonProps {
   color?: string
   loading?: boolean
   styles?: StyleProp<ViewStyle>
+  prefix?: ReactNode
+  suffix?: ReactNode
   onPress: () => void
 }
 
-export function AppButton({ text, onPress, color, loading, styles }: AppButtonProps) {
+export function AppButton({
+  text,
+  onPress,
+  color,
+  loading,
+  styles,
+  prefix,
+  suffix
+}: AppButtonProps) {
   return (
     <TouchableOpacity
       disabled={loading}
@@ -30,7 +40,15 @@ export function AppButton({ text, onPress, color, loading, styles }: AppButtonPr
         styles
       ]}
     >
-      {loading ? <ActivityIndicator /> : <AppText text={text} flex={0} size={16} />}
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Row>
+          {prefix && <View>{prefix}</View>}
+          <AppText text={text} flex={0} size={16} />
+          {suffix && <View>{suffix}</View>}
+        </Row>
+      )}
     </TouchableOpacity>
   )
 }

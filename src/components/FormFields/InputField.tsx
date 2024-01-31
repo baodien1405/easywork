@@ -65,7 +65,7 @@ export function InputField<T extends FieldValues>({
           globalStyles.inputContainer,
           {
             minHeight: multiline && numberOfLines ? 32 * numberOfLines : 32,
-            paddingVertical: 14,
+            paddingVertical: multiline && numberOfLines ? 4 : 14,
             paddingHorizontal: 10,
             alignItems: multiline && numberOfLines ? 'flex-start' : 'center',
             borderWidth: 0.5,
@@ -105,7 +105,10 @@ export function InputField<T extends FieldValues>({
         {suffix && <View>{suffix}</View>}
 
         {allowClear && value && (
-          <TouchableOpacity onPress={() => onChange('')}>
+          <TouchableOpacity
+            onPress={() => onChange('')}
+            style={{ marginTop: multiline && numberOfLines ? 10 : 0 }}
+          >
             <AntDesign name="close" size={20} color={COLORS.white1} />
           </TouchableOpacity>
         )}

@@ -1,11 +1,17 @@
 import React from 'react'
+import firestore from '@react-native-firebase/firestore'
 
 import { Container, TaskForm } from '@/components'
-import { Task } from '@/models'
+import { AddEditTaskScreenProps, Task } from '@/models'
 
-export function AddEditTaskScreen() {
-  const handleTaskSubmit = (payload: Task) => {
-    console.log('🚀 ~ handleTaskSubmit ~ payload:', payload)
+export function AddEditTaskScreen({ navigation }: AddEditTaskScreenProps) {
+  const handleTaskSubmit = async (payload: Task) => {
+    try {
+      await firestore().collection('tasks').add(payload)
+      navigation.goBack()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

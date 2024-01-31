@@ -1,6 +1,6 @@
 import { ArrowDown2, SearchNormal1, TickCircle } from 'iconsax-react-native'
 import React, { ReactNode, useState } from 'react'
-import { Control, FieldValues, Path, useController } from 'react-hook-form'
+import { Control, FieldValues, Path, useController, useForm } from 'react-hook-form'
 import { FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
@@ -33,6 +33,7 @@ export function DropdownPickerField<T extends FieldValues>({
 }: DropdownPickerFieldProps<T>) {
   const [isVisible, setIsVisible] = useState(false)
   const [searchText, setSearchText] = useState('')
+  const { control: searchControl } = useForm()
 
   const filteredItems = items.filter((x) =>
     x.label.toLowerCase().includes(searchText.toLowerCase())
@@ -48,6 +49,11 @@ export function DropdownPickerField<T extends FieldValues>({
 
   const selectedIdList: string[] = value || []
 
+  const handleChange = (ids: string[]) => {
+    onChange(ids)
+    externalOnChange?.(ids)
+  }
+
   const handleSelectUser = (userId: string) => {
     if (multiple) {
       const newIdList = [...selectedIdList]
@@ -59,11 +65,9 @@ export function DropdownPickerField<T extends FieldValues>({
         newIdList.push(userId)
       }
 
-      onChange(newIdList)
-      externalOnChange?.(newIdList)
+      handleChange(newIdList)
     } else {
-      onChange([userId])
-      externalOnChange?.([userId])
+      handleChange([userId])
     }
   }
 
@@ -71,8 +75,7 @@ export function DropdownPickerField<T extends FieldValues>({
     const newUserIdList = [...selectedIdList]
     newUserIdList.splice(index, 1)
 
-    onChange(newUserIdList)
-    externalOnChange?.(newUserIdList)
+    handleChange(newUserIdList)
   }
 
   return (
@@ -135,7 +138,7 @@ export function DropdownPickerField<T extends FieldValues>({
                     name="search"
                     placeholder="Search..."
                     prefix={<SearchNormal1 size={20} color={COLORS.gray2} />}
-                    control={control as any}
+                    control={searchControl}
                     onChangeText={(text) => setSearchText(text)}
                     allowClear
                   />
@@ -181,7 +184,7 @@ const styles = StyleSheet.create({
   },
   row: {
     justifyContent: 'space-between',
-    paddingVertical: 14
+    paddingVertical: 20
   },
   input: {
     margin: 0,
@@ -210,7 +213,6 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 100,
     borderWidth: 0.5,
-    borderColor: COLORS.gray2,
-    marginBottom: 8
+    borderColor: COLORS.gray2
   }
 })

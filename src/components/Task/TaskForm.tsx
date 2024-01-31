@@ -3,14 +3,21 @@ import { User } from 'iconsax-react-native'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
+import { DocumentPickerResponse } from 'react-native-document-picker'
+import storage from '@react-native-firebase/storage'
 
 import { AppButton, Row, Section, Space } from '@/components'
-import { DatePickerField, DropdownPickerField, InputField } from '@/components/FormFields'
+import {
+  DatePickerField,
+  DropdownPickerField,
+  InputField,
+  UploadFileField
+} from '@/components/FormFields'
 import { COLORS, FORMAT_TYPES } from '@/constants'
 import { useTaskSchema } from '@/hooks'
-import { Option, Task } from '@/models'
+import { Task } from '@/models'
 import { globalStyles } from '@/styles'
-import { useUserList } from '@/hooks/fetchers'
+import { useUserList } from '@/hooks'
 
 interface TaskFormProps {
   initialValues?: Task
@@ -31,12 +38,35 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
   })
 
   const { data: userList } = useUserList()
-  const memberOptions: Option[] = userList.map((user) => ({
+
+  const memberOptions = userList.map((user) => ({
     label: user.name,
     value: user.id
   }))
 
+  const handleUploadFileToStorage = async (item: DocumentPickerResponse) => {
+    try {
+      const filename = item.name || `file${Date.now()}`
+      const path = `documents/${filename}`
+
+      await storage().ref(path).putFile(item.uri)
+
+      return await storage().ref(path).getDownloadURL()
+    } catch (error) {
+      console.log('Failed to upload file ', error)
+    }
+  }
+
   const handleFormSubmit = async (formValues: Task) => {
+    const fileUrlsPromiseList = formValues?.fileList?.map((file: DocumentPickerResponse) => {
+      return handleUploadFileToStorage(file)
+    })
+
+    const fileUrls = await Promise.all(fileUrlsPromiseList)
+
+    delete formValues.fileList
+    formValues.fileUrls = fileUrls
+
     await onSubmit?.(formValues)
   }
 
@@ -96,12 +126,14 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
       </Row>
 
       <DropdownPickerField
-        name="members"
+        name="uids"
         control={control}
         label="Members"
         items={memberOptions}
         multiple
       />
+
+      <UploadFileField name="fileList" control={control} label="Attachments" />
 
       <AppButton
         text="Add"
