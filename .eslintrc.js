@@ -19,6 +19,8 @@ module.exports = {
     'keyword-spacing': 1,
     'comma-dangle': 0,
     'comma-spacing': 1,
-    'arrow-spacing': 1
+    'arrow-spacing': 1,
+    curly: 0,
+    'react-native/no-inline-styles': 0
   }
 }

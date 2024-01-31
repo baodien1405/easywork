@@ -35,7 +35,7 @@ export function ProgressBar({ color = 'coral', size = 'default', percent }: Prog
             backgroundColor: color,
             borderRadius: 100
           }}
-        ></View>
+        />
       </View>
 
       <Row justify="space-between" styles={{ marginTop: 4 }}>

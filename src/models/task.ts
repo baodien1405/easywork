@@ -3,6 +3,7 @@ import { RootStackParamList } from './stack'
 
 export type AddEditTaskScreenProps = NativeStackScreenProps<RootStackParamList, 'AddEditTaskScreen'>
 export interface Task {
+  id?: string
   title: string
   description: string
   dueDate: Date
@@ -11,4 +12,5 @@ export interface Task {
   uids: string[]
   fileList?: any
   fileUrls?: string[]
+  progress?: string
 }
