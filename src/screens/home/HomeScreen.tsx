@@ -30,30 +30,30 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [taskList, setTaskList] = useState<Task[]>([])
 
-  const getTaskList = async () => {
-    setIsLoading(true)
-    await firestore()
-      .collection('tasks')
-      .orderBy('dueDate')
-      .limitToLast(3)
-      .onSnapshot((snap) => {
-        if (snap.empty) return
-
-        const items: Task[] = []
-        snap.forEach((item: any) =>
-          items.push({
-            id: item.id,
-            ...item.data()
-          })
-        )
-
-        setTaskList(items)
-      })
-    setIsLoading(false)
-  }
-
   useEffect(() => {
-    getTaskList()
+    const fetchTaskListAPI = async () => {
+      setIsLoading(true)
+      await firestore()
+        .collection('tasks')
+        .orderBy('dueDate')
+        .limitToLast(3)
+        .onSnapshot((snap) => {
+          if (snap.empty) return
+
+          const items: Task[] = []
+          snap.forEach((item: any) =>
+            items.push({
+              id: item.id,
+              ...item.data()
+            })
+          )
+
+          setTaskList(items)
+        })
+      setIsLoading(false)
+    }
+
+    fetchTaskListAPI()
   }, [])
 
   return (
@@ -113,7 +113,14 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
             <Row styles={{ alignItems: 'flex-start' }}>
               <View style={styles.flex1}>
                 {taskList[0] && (
-                  <CardImage>
+                  <CardImage
+                    onPress={() =>
+                      navigation.navigate(SCREENS.TASK_DETAILS_SCREEN, {
+                        taskId: taskList[0].id,
+                        color: 'rgba(113, 77, 217, 0.9)'
+                      })
+                    }
+                  >
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
@@ -142,7 +149,15 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
               <View style={styles.flex1}>
                 {taskList[1] && (
-                  <CardImage color="rgba(33, 150, 243, 0.9)">
+                  <CardImage
+                    color="rgba(33, 150, 243, 0.9)"
+                    onPress={() =>
+                      navigation.navigate(SCREENS.TASK_DETAILS_SCREEN, {
+                        taskId: taskList[1].id,
+                        color: 'rgba(33, 150, 243, 0.9)'
+                      })
+                    }
+                  >
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
@@ -155,7 +170,15 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                 <Space height={16} />
 
                 {taskList[2] && (
-                  <CardImage color="rgba(18, 181, 22, 0.9)">
+                  <CardImage
+                    color="rgba(18, 181, 22, 0.9)"
+                    onPress={() =>
+                      navigation.navigate(SCREENS.TASK_DETAILS_SCREEN, {
+                        taskId: taskList[2].id,
+                        color: 'rgba(18, 181, 22, 0.9)'
+                      })
+                    }
+                  >
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>

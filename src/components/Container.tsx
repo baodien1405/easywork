@@ -1,6 +1,6 @@
 import { ArrowLeft2 } from 'iconsax-react-native'
 import React, { ReactNode } from 'react'
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { COLORS, FONT_FAMILIES } from '@/constants'
@@ -20,32 +20,34 @@ export const Container = ({ back, title, children, isScroll }: ContainerProps) =
   const navigation = useNavigation()
 
   return (
-    <View style={[globalStyles.container]}>
-      <Row styles={styles.header}>
-        {back && (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <ArrowLeft2 size={24} color={COLORS.text} />
-          </TouchableOpacity>
-        )}
-        <View style={styles.titleContainer}>
-          {title && (
-            <AppText
-              flex={0}
-              font={FONT_FAMILIES.bold}
-              size={16}
-              text={title}
-              styles={{ textAlign: 'center', marginLeft: back ? -24 : 0 }}
-            />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bgColor }}>
+      <View style={[globalStyles.container]}>
+        <Row styles={styles.header}>
+          {back && (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <ArrowLeft2 size={24} color={COLORS.text} />
+            </TouchableOpacity>
           )}
-        </View>
-      </Row>
+          <View style={styles.titleContainer}>
+            {title && (
+              <AppText
+                flex={0}
+                font={FONT_FAMILIES.bold}
+                size={16}
+                text={title}
+                styles={{ textAlign: 'center', marginLeft: back ? -24 : 0 }}
+              />
+            )}
+          </View>
+        </Row>
 
-      {isScroll ? (
-        <ScrollView style={globalStyles.flex1}>{children}</ScrollView>
-      ) : (
-        <View style={globalStyles.flex1}>{children}</View>
-      )}
-    </View>
+        {isScroll ? (
+          <ScrollView style={globalStyles.flex1}>{children}</ScrollView>
+        ) : (
+          <View style={globalStyles.flex1}>{children}</View>
+        )}
+      </View>
+    </SafeAreaView>
   )
 }
 

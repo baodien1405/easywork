@@ -3,5 +3,5 @@ export type RootStackParamList = {
   SignUpScreen: undefined
   HomeScreen: undefined
   AddEditTaskScreen: { taskId?: string } | undefined
-  TaskDetailsScreen: { taskId?: string }
+  TaskDetailsScreen: { taskId?: string; color?: string }
 }
