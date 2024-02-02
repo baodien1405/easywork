@@ -10,6 +10,7 @@ interface AppTextProps {
   color?: string
   flex?: number
   styles?: StyleProp<TextStyle>
+  numberOfLines?: number
   onPress?: () => void
 }
 
@@ -20,10 +21,12 @@ export function AppText({
   color = COLORS.desc,
   flex = 1,
   styles,
+  numberOfLines,
   onPress
 }: AppTextProps) {
   return (
     <Text
+      numberOfLines={numberOfLines}
       style={[
         globalStyles.text,
         {

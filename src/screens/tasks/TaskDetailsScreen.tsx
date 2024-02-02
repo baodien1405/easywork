@@ -3,7 +3,7 @@ import { ScrollView, TouchableOpacity } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import { ArrowLeft2, CalendarEdit, Clock } from 'iconsax-react-native'
 
-import { AppText, AvatarGroup, Row, Section, Space, Title } from '@/components'
+import { AppText, AvatarGroup, Card, Row, Section, Space, Title } from '@/components'
 import { Task, TaskDetailsScreenProps } from '@/models'
 import { COLORS } from '@/constants'
 import { globalStyles } from '@/styles'
@@ -33,8 +33,16 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
   if (!task) return <></>
 
   return (
-    <ScrollView style={globalStyles.flex1}>
-      <Section styles={{ backgroundColor: color, paddingVertical: 20, paddingTop: 48 }}>
+    <ScrollView style={(globalStyles.flex1, { backgroundColor: COLORS.bgColor })}>
+      <Section
+        styles={{
+          backgroundColor: color,
+          paddingBottom: 18,
+          paddingTop: 60,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20
+        }}
+      >
         <Row justify="flex-start">
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <ArrowLeft2 size={24} color={COLORS.text} />
@@ -67,6 +75,15 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
             <AvatarGroup />
           </Row>
         </Row>
+      </Section>
+
+      <Section>
+        <Title text="Description" />
+        <Card
+          styles={{ marginTop: 12, borderWidth: 1, borderColor: COLORS.gray, borderRadius: 12 }}
+        >
+          <AppText text={task.description} />
+        </Card>
       </Section>
     </ScrollView>
   )

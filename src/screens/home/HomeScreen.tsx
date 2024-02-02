@@ -125,7 +125,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
                     <Title text={taskList[0].title} />
-                    <AppText text={taskList[0].description} size={13} />
+                    <AppText text={taskList[0].description} size={13} numberOfLines={4} />
 
                     <View style={{ marginVertical: 25 }}>
                       <AvatarGroup />
