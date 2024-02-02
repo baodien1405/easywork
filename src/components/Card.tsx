@@ -9,7 +9,7 @@ interface CardProps {
   children: ReactNode
 }
 
-export function Card({ styles, bgColor = COLORS.bgColor, children }: CardProps) {
+export function Card({ styles, bgColor = COLORS.gray, children }: CardProps) {
   return (
     <View style={[globalStyles.inputContainer, { padding: 12, backgroundColor: bgColor }, styles]}>
       {children}
