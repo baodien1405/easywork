@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, TouchableOpacity } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
-import { ArrowLeft2, CalendarEdit, Clock } from 'iconsax-react-native'
+import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
 import dayjs from 'dayjs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { AppText, AvatarGroup, Card, Row, Section, Space, Title } from '@/components'
+import { AppText, AvatarGroup, Card, ProgressBar, Row, Section, Space, Title } from '@/components'
 import { Task, TaskDetailsScreenProps } from '@/models'
-import { COLORS } from '@/constants'
+import { COLORS, FONT_FAMILIES } from '@/constants'
 import { globalStyles } from '@/styles'
 
 export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps) {
@@ -117,6 +117,61 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
             </Row>
           </Row>
         </Card>
+      </Section>
+
+      <Section>
+        <Row>
+          <View
+            style={{
+              height: 24,
+              width: 24,
+              borderRadius: 100,
+              borderWidth: 2,
+              borderColor: COLORS.success,
+              marginRight: 4,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <View
+              style={{ height: 16, width: 16, borderRadius: 100, backgroundColor: COLORS.success }}
+            />
+          </View>
+
+          <AppText text="Progress" size={18} color={COLORS.text} flex={1} />
+        </Row>
+
+        <Space height={12} />
+
+        <Row justify="space-between">
+          <AppText text="Slide" />
+          <AppText text="70%" font={FONT_FAMILIES.bold} size={18} flex={0} />
+        </Row>
+
+        <Row justify="flex-start">
+          <View style={{ flex: 1 }}>
+            <ProgressBar percent="80%" color={color} />
+          </View>
+        </Row>
+      </Section>
+
+      <Section>
+        <Row>
+          <Title text="Sub tasks" size={20} flex={1} />
+          <AddSquare size={24} color={COLORS.success} variant="Bold" />
+        </Row>
+
+        <Space height={12} />
+
+        {Array.from({ length: 3 }).map(() => (
+          <Card styles={{ marginBottom: 12 }}>
+            <Row>
+              <TickCircle variant="Bold" size={22} color={COLORS.success} />
+              <Space width={8} />
+              <AppText text="abc" />
+            </Row>
+          </Card>
+        ))}
       </Section>
     </ScrollView>
   )
