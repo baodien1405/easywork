@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
 import dayjs from 'dayjs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Slider } from '@miblanchard/react-native-slider'
 
-import { AppText, AvatarGroup, Card, ProgressBar, Row, Section, Space, Title } from '@/components'
+import { AppButton, AppText, AvatarGroup, Card, Row, Section, Space, Title } from '@/components'
 import { Task, TaskDetailsScreenProps } from '@/models'
 import { COLORS, FONT_FAMILIES } from '@/constants'
 import { globalStyles } from '@/styles'
@@ -15,6 +16,9 @@ import { globalStyles } from '@/styles'
 export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps) {
   const { taskId, color = 'rgba(113, 77, 217, 0.9)' } = route.params
   const [task, setTask] = useState<Task | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const showUpdateButton = Math.floor((task?.progress || 0) * 100) !== Math.floor(progress * 100)
 
   useEffect(() => {
     const fetchTaskDetailsAPI = async () => {
@@ -33,7 +37,28 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
     fetchTaskDetailsAPI()
   }, [taskId])
 
+  useEffect(() => {
+    if (task?.progress) {
+      setProgress(task?.progress)
+    }
+  }, [task?.progress])
+
   if (!task) return <></>
+
+  const handleUpdateTask = () => {
+    const updateData = { ...task, progress }
+    setIsLoading(true)
+    firestore()
+      .doc(`tasks/${taskId}`)
+      .update(updateData)
+      .then(() => {
+        setIsLoading(false)
+        Alert.alert('Update task success')
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
+  }
 
   return (
     <ScrollView style={(globalStyles.flex1, { backgroundColor: COLORS.bgColor })}>
@@ -134,7 +159,12 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
             }}
           >
             <View
-              style={{ height: 16, width: 16, borderRadius: 100, backgroundColor: COLORS.success }}
+              style={{
+                height: 16,
+                width: 16,
+                borderRadius: 100,
+                backgroundColor: COLORS.success
+              }}
             />
           </View>
 
@@ -143,15 +173,27 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
         <Space height={12} />
 
-        <Row justify="space-between">
-          <AppText text="Slide" />
-          <AppText text="70%" font={FONT_FAMILIES.bold} size={18} flex={0} />
-        </Row>
-
-        <Row justify="flex-start">
+        <Row>
           <View style={{ flex: 1 }}>
-            <ProgressBar percent="80%" color={color} />
+            <Slider
+              value={progress}
+              onValueChange={(value) => setProgress(value[0])}
+              thumbTintColor={COLORS.success}
+              maximumTrackTintColor={COLORS.gray2}
+              minimumTrackTintColor={COLORS.success}
+              trackStyle={{ height: 10, borderRadius: 100 }}
+              thumbStyle={{ borderWidth: 2, borderColor: COLORS.white1 }}
+            />
           </View>
+
+          <Space width={8} />
+
+          <AppText
+            text={`${Math.round(progress * 100)}%`}
+            font={FONT_FAMILIES.bold}
+            size={18}
+            flex={0}
+          />
         </Row>
       </Section>
 
@@ -163,8 +205,8 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
         <Space height={12} />
 
-        {Array.from({ length: 3 }).map(() => (
-          <Card styles={{ marginBottom: 12 }}>
+        {Array.from({ length: 3 }).map((item, index) => (
+          <Card styles={{ marginBottom: 12 }} key={index}>
             <Row>
               <TickCircle variant="Bold" size={22} color={COLORS.success} />
               <Space width={8} />
@@ -173,6 +215,12 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
           </Card>
         ))}
       </Section>
+
+      {showUpdateButton && (
+        <View style={{ position: 'absolute', bottom: 20, right: 20, left: 20 }}>
+          <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />
+        </View>
+      )}
     </ScrollView>
   )
 }

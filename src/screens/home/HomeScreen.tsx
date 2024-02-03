@@ -129,8 +129,12 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
                     <View style={{ marginVertical: 25 }}>
                       <AvatarGroup />
-                      {taskList[0].progress && (
-                        <ProgressBar percent="80%" color="#0AACFF" size="large" />
+                      {taskList[0]?.progress !== undefined && (
+                        <ProgressBar
+                          percent={`${Math.round(taskList[0]?.progress * 100)}%`}
+                          color="#0AACFF"
+                          size="large"
+                        />
                       )}
                     </View>
 
@@ -163,7 +167,13 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     </TouchableOpacity>
                     <Title text={taskList[1].title} size={18} />
                     <AppText text={taskList[1].description} size={13} />
-                    {taskList[1].progress && <ProgressBar percent="80%" color="#A2F068" />}
+                    {taskList[1]?.progress !== undefined && (
+                      <ProgressBar
+                        percent={`${Math.round(taskList[1]?.progress * 100)}%`}
+                        color="#A2F068"
+                        size="large"
+                      />
+                    )}
                   </CardImage>
                 )}
 
@@ -184,6 +194,13 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     </TouchableOpacity>
                     <Title text={taskList[2].title} size={18} />
                     <AppText text={taskList[2].description} size={13} />
+                    {taskList[2]?.progress !== undefined && (
+                      <ProgressBar
+                        percent={`${Math.round(taskList[2]?.progress * 100)}%`}
+                        color="rgba(113, 77, 217, 0.9)"
+                        size="large"
+                      />
+                    )}
                   </CardImage>
                 )}
               </View>

@@ -15,5 +15,5 @@ export interface Task {
   uids: string[]
   fileList?: any
   fileUrls?: string[]
-  progress?: string
+  progress?: number
 }

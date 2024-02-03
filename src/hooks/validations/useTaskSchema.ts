@@ -15,6 +15,12 @@ export const useTaskSchema = () => {
     fileList: yup
       .mixed()
       .nullable()
+      .test('test-required', 'Please select a file', (value: any) => {
+        if (!Array.isArray(value) || value?.length === 0) {
+          return false
+        }
+        return true
+      })
       .test('test-size', 'Maximum file exceeded. Please select another file', (value: any) => {
         const fileSize =
           value?.reduce((size: number, currentFile: File) => {

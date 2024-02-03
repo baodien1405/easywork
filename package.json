@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@miblanchard/react-native-slider": "^2.3.1",
     "@react-native-firebase/app": "^18.8.0",
     "@react-native-firebase/auth": "^18.8.0",
     "@react-native-firebase/firestore": "^18.8.0",
