@@ -40,7 +40,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
   useEffect(() => {
     if (task?.progress) {
-      setProgress(task?.progress)
+      setProgress(task.progress)
     }
   }, [task?.progress])
 
