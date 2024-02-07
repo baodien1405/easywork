@@ -12,12 +12,14 @@ type UploadFileFieldProps<T extends FieldValues> = {
   multiple?: boolean
   name: Path<T>
   control: Control<T>
+  onChange?: (fileList: DocumentPickerResponse[]) => void
 }
 
 export function UploadFileField<T extends FieldValues>({
   label,
   name,
-  control
+  control,
+  onChange: externalOnChange
 }: UploadFileFieldProps<T>) {
   const {
     field: { onChange, value },
@@ -34,7 +36,10 @@ export function UploadFileField<T extends FieldValues>({
       allowMultiSelection: false,
       type: [DocumentPicker.types.pdf, DocumentPicker.types.doc, DocumentPicker.types.xlsx]
     })
-      .then((res) => onChange(res))
+      .then((res) => {
+        onChange(res)
+        externalOnChange?.(res)
+      })
       .catch(() => {})
   }
 
@@ -48,7 +53,7 @@ export function UploadFileField<T extends FieldValues>({
 
       {fileNameList.map((fileName) => (
         <Row key={`attachment ${fileName}`} styles={styles.fileName}>
-          <AppText text={fileName || ''} color={error?.message ? COLORS.error : 'green'} />
+          <AppText text={fileName} color={error?.message ? COLORS.error : COLORS.success} />
         </Row>
       ))}
 

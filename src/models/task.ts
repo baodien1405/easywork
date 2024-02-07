@@ -5,6 +5,12 @@ export type AddEditTaskScreenProps = NativeStackScreenProps<RootStackParamList, 
 
 export type TaskDetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'TaskDetailsScreen'>
 
+interface Attachment {
+  name: string
+  size: number
+  url: string
+}
+
 export interface Task {
   id?: string
   title: string
@@ -14,6 +20,6 @@ export interface Task {
   end: Date
   uids: string[]
   fileList?: any
-  fileUrls?: string[]
+  attachments?: Attachment[]
   progress?: number
 }

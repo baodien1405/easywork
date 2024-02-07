@@ -166,7 +166,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
                     <Title text={taskList[1].title} size={18} />
-                    <AppText text={taskList[1].description} size={13} />
+                    <AppText text={taskList[1].description} size={13} numberOfLines={3} />
                     {taskList[1]?.progress !== undefined && (
                       <ProgressBar
                         percent={`${Math.round(taskList[1]?.progress * 100)}%`}
@@ -193,7 +193,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
                     <Title text={taskList[2].title} size={18} />
-                    <AppText text={taskList[2].description} size={13} />
+                    <AppText text={taskList[2].description} size={13} numberOfLines={3} />
                     {taskList[2]?.progress !== undefined && (
                       <ProgressBar
                         percent={`${Math.round(taskList[2]?.progress * 100)}%`}

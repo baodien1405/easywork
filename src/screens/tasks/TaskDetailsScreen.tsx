@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
+import { DocumentPickerResponse } from 'react-native-document-picker'
 import firestore from '@react-native-firebase/firestore'
 import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
 import { useForm } from 'react-hook-form'
@@ -11,14 +12,14 @@ import { Task, TaskDetailsScreenProps } from '@/models'
 import { COLORS, FONT_FAMILIES } from '@/constants'
 import { globalStyles } from '@/styles'
 import { UploadFileField } from '@/components/FormFields'
+import { convertFileSizeToMB, handleUploadFileToStorage } from '@/utils'
 
 export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps) {
   const { taskId, color = 'rgba(113, 77, 217, 0.9)' } = route.params
   const [task, setTask] = useState<Task | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [progress, setProgress] = useState(0)
-  const showUpdateButton = Math.floor((task?.progress || 0) * 100) !== Math.floor(progress * 100)
-
+  const [fileList, setFileList] = useState<DocumentPickerResponse[]>([])
   const { control } = useForm()
 
   useEffect(() => {
@@ -46,19 +47,28 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
   if (!task) return <></>
 
-  const handleUpdateTask = () => {
-    const updateData = { ...task, progress }
-    setIsLoading(true)
-    firestore()
-      .doc(`tasks/${taskId}`)
-      .update(updateData)
-      .then(() => {
-        setIsLoading(false)
-        Alert.alert('Update task success')
+  const handleUpdateTask = async () => {
+    try {
+      setIsLoading(true)
+      const attachmentListPromiseList = fileList?.map((file: DocumentPickerResponse) => {
+        return handleUploadFileToStorage(file)
       })
-      .catch(() => {
-        setIsLoading(false)
-      })
+
+      const attachmentList = await Promise.all(attachmentListPromiseList)
+      const updateData: Task = {
+        ...task,
+        progress,
+        attachments: task?.attachments?.concat(attachmentList)
+      }
+
+      await firestore().doc(`tasks/${taskId}`).update(updateData)
+
+      Alert.alert('Update task success')
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -117,7 +127,19 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
       </Section>
 
       <Section>
-        <UploadFileField name="fileList" control={control} label="Files & Links" />
+        <UploadFileField
+          name="fileList"
+          control={control}
+          label="Files & Links"
+          onChange={(value) => setFileList(value)}
+        />
+
+        {task.attachments?.map((item) => (
+          <View style={{ marginBottom: 8 }}>
+            <AppText text={item.name} color={COLORS.success} />
+            <AppText text={`${convertFileSizeToMB(item.size).toFixed(2)} MB`} size={12} />
+          </View>
+        ))}
       </Section>
 
       <Section>
@@ -192,11 +214,9 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         ))}
       </Section>
 
-      {showUpdateButton && (
-        <View style={{ position: 'absolute', bottom: 20, right: 20, left: 20 }}>
-          <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />
-        </View>
-      )}
+      <View style={{ position: 'absolute', bottom: 20, right: 20, left: 20 }}>
+        <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />
+      </View>
     </ScrollView>
   )
 }

@@ -4,7 +4,6 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import { DocumentPickerResponse } from 'react-native-document-picker'
-import storage from '@react-native-firebase/storage'
 
 import { AppButton, Row, Section, Space } from '@/components'
 import {
@@ -18,6 +17,7 @@ import { useTaskSchema } from '@/hooks'
 import { Task } from '@/models'
 import { globalStyles } from '@/styles'
 import { useUserList } from '@/hooks'
+import { handleUploadFileToStorage } from '@/utils'
 
 interface TaskFormProps {
   initialValues?: Task
@@ -44,28 +44,15 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
     value: user.id
   }))
 
-  const handleUploadFileToStorage = async (item: DocumentPickerResponse) => {
-    try {
-      const filename = item.name || `file${Date.now()}`
-      const path = `documents/${filename}`
-
-      await storage().ref(path).putFile(item.uri)
-
-      return await storage().ref(path).getDownloadURL()
-    } catch (error) {
-      console.log('Failed to upload file ', error)
-    }
-  }
-
   const handleFormSubmit = async (formValues: Task) => {
-    const fileUrlsPromiseList = formValues?.fileList?.map((file: DocumentPickerResponse) => {
+    const attachmentListPromiseList = formValues?.fileList?.map((file: DocumentPickerResponse) => {
       return handleUploadFileToStorage(file)
     })
 
-    const fileUrls = await Promise.all(fileUrlsPromiseList)
+    const attachmentList = await Promise.all(attachmentListPromiseList)
 
     delete formValues.fileList
-    formValues.fileUrls = fileUrls
+    formValues.attachments = attachmentList
 
     await onSubmit?.(formValues)
   }
