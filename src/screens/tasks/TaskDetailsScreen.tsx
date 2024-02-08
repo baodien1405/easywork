@@ -1,17 +1,27 @@
+import { Slider } from '@miblanchard/react-native-slider'
+import firestore from '@react-native-firebase/firestore'
+import dayjs from 'dayjs'
+import { ArrowLeft2, CalendarEdit, Clock } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
 import { DocumentPickerResponse } from 'react-native-document-picker'
-import firestore from '@react-native-firebase/firestore'
-import { AddSquare, ArrowLeft2, CalendarEdit, Clock, TickCircle } from 'iconsax-react-native'
-import { useForm } from 'react-hook-form'
-import dayjs from 'dayjs'
-import { Slider } from '@miblanchard/react-native-slider'
 
-import { AppButton, AppText, AvatarGroup, Card, Row, Section, Space, Title } from '@/components'
-import { Task, TaskDetailsScreenProps } from '@/models'
-import { COLORS, FONT_FAMILIES } from '@/constants'
-import { globalStyles } from '@/styles'
+import {
+  AppButton,
+  AppText,
+  AvatarGroup,
+  Card,
+  Row,
+  Section,
+  Space,
+  SubtaskList,
+  Title
+} from '@/components'
 import { UploadFileField } from '@/components/FormFields'
+import { COLORS, FONT_FAMILIES } from '@/constants'
+import { Task, TaskDetailsScreenProps } from '@/models'
+import { globalStyles } from '@/styles'
 import { convertFileSizeToMB, handleUploadFileToStorage } from '@/utils'
 
 export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps) {
@@ -58,7 +68,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
       const updateData: Task = {
         ...task,
         progress,
-        attachments: task?.attachments?.concat(attachmentList)
+        attachments: (task?.attachments || []).concat(attachmentList)
       }
 
       await firestore().doc(`tasks/${taskId}`).update(updateData)
@@ -195,24 +205,11 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         </Row>
       </Section>
 
-      <Section>
-        <Row>
-          <Title text="Sub tasks" size={20} flex={1} />
-          <AddSquare size={24} color={COLORS.success} variant="Bold" />
-        </Row>
-
-        <Space height={12} />
-
-        {Array.from({ length: 3 }).map((item, index) => (
-          <Card styles={{ marginBottom: 12 }} key={index}>
-            <Row>
-              <TickCircle variant="Bold" size={22} color={COLORS.success} />
-              <Space width={8} />
-              <AppText text="abc" />
-            </Row>
-          </Card>
-        ))}
-      </Section>
+      {taskId && (
+        <Section>
+          <SubtaskList taskId={taskId} />
+        </Section>
+      )}
 
       <View style={{ position: 'absolute', bottom: 20, right: 20, left: 20 }}>
         <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />

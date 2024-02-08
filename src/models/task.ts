@@ -23,3 +23,10 @@ export interface Task {
   attachments?: Attachment[]
   progress?: number
 }
+
+export interface SubTask {
+  id?: string
+  title: string
+  description: string
+  isCompleted?: boolean
+}

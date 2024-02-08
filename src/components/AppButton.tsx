@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { ActivityIndicator, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 
 import { AppText, Row } from '@/components'
-import { COLORS } from '@/constants'
+import { COLORS, FONT_FAMILIES } from '@/constants'
 
 interface AppButtonProps {
   text: string
@@ -45,7 +45,7 @@ export function AppButton({
       ) : (
         <Row>
           {prefix && <View>{prefix}</View>}
-          <AppText text={text} flex={0} size={16} />
+          <AppText text={text} flex={0} size={16} font={FONT_FAMILIES.semibold} />
           {suffix && <View>{suffix}</View>}
         </Row>
       )}
