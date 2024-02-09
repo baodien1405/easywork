@@ -1,6 +1,6 @@
 import { AddSquare, TickCircle } from 'iconsax-react-native'
-import React, { useState } from 'react'
-import { Alert, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 
 import { AppText, Card, Row, Space, SubtaskForm, Title } from '@/components'
@@ -13,16 +13,41 @@ interface SubtaskListProps {
 
 export const SubtaskList = ({ taskId }: SubtaskListProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [subtaskList, setSubtaskList] = useState<SubTask[]>([])
+
+  useEffect(() => {
+    const fetchTaskDetailsAPI = async () => {
+      await firestore()
+        .collection('subtasks')
+        .where('taskId', '==', taskId)
+        .onSnapshot((snap) => {
+          if (snap.empty) return
+
+          const items: any[] = []
+
+          snap.forEach((item) => {
+            items.push({
+              id: item.id,
+              ...item.data()
+            })
+          })
+
+          setSubtaskList(items)
+        })
+    }
+    fetchTaskDetailsAPI()
+  }, [taskId])
 
   const handleAddSubtask = async (payload: SubTask) => {
     try {
       const newSubtask = {
         ...payload,
         taskId,
+        isCompleted: false,
         createdAt: Date.now(),
         updatedAt: Date.now()
       }
-      await firestore().collection('subTasks').add(newSubtask)
+      await firestore().collection('subtasks').add(newSubtask)
 
       Alert.alert('Success')
       setIsOpenModal(false)
@@ -42,15 +67,21 @@ export const SubtaskList = ({ taskId }: SubtaskListProps) => {
 
       <Space height={12} />
 
-      {Array.from({ length: 3 }).map((item, index) => (
-        <Card styles={{ marginBottom: 12 }} key={index}>
-          <Row>
-            <TickCircle variant="Bold" size={22} color={COLORS.success} />
-            <Space width={8} />
-            <AppText text="abc" />
-          </Row>
-        </Card>
-      ))}
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={subtaskList}
+        renderItem={({ item }) => {
+          return (
+            <Card styles={{ marginBottom: 12 }} key={item.id}>
+              <Row>
+                <TickCircle variant="Bold" size={22} color={COLORS.success} />
+                <Space width={8} />
+                <AppText text={item.title} />
+              </Row>
+            </Card>
+          )
+        }}
+      />
 
       <Modal visible={isOpenModal} transparent animationType="slide">
         <View style={styles.modalContainer}>

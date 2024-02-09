@@ -29,4 +29,5 @@ export interface SubTask {
   title: string
   description: string
   isCompleted?: boolean
+  taskId?: string
 }

@@ -145,7 +145,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         />
 
         {task.attachments?.map((item) => (
-          <View style={{ marginBottom: 8 }}>
+          <View style={{ marginBottom: 8 }} key={item.url}>
             <AppText text={item.name} color={COLORS.success} />
             <AppText text={`${convertFileSizeToMB(item.size).toFixed(2)} MB`} size={12} />
           </View>
@@ -211,9 +211,9 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         </Section>
       )}
 
-      <View style={{ position: 'absolute', bottom: 20, right: 20, left: 20 }}>
+      <Section>
         <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />
-      </View>
+      </Section>
     </ScrollView>
   )
 }
