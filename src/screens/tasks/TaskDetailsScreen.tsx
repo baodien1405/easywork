@@ -184,6 +184,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         <Row>
           <View style={{ flex: 1 }}>
             <Slider
+              disabled
               value={progress}
               onValueChange={(value) => setProgress(value[0])}
               thumbTintColor={COLORS.success}
@@ -207,7 +208,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
       {taskId && (
         <Section>
-          <SubtaskList taskId={taskId} />
+          <SubtaskList taskId={taskId} onProgress={(value) => setProgress(value)} />
         </Section>
       )}
 

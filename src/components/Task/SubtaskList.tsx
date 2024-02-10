@@ -2,16 +2,18 @@ import firestore from '@react-native-firebase/firestore'
 import { AddSquare, TickCircle } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react'
 import { Alert, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
+import dayjs from 'dayjs'
 
-import { AppText, Card, Row, Space, SubtaskForm, Title } from '@/components'
+import { AppText, Card, Row, SubtaskForm, Title } from '@/components'
 import { COLORS } from '@/constants'
 import { SubTask } from '@/models'
 
 interface SubtaskListProps {
   taskId: string
+  onProgress?: (progress: number) => void
 }
 
-export const SubtaskList = ({ taskId }: SubtaskListProps) => {
+export const SubtaskList = ({ taskId, onProgress }: SubtaskListProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [subtaskList, setSubtaskList] = useState<SubTask[]>([])
 
@@ -37,6 +39,21 @@ export const SubtaskList = ({ taskId }: SubtaskListProps) => {
     }
     fetchTaskDetailsAPI()
   }, [taskId])
+
+  useEffect(() => {
+    if (subtaskList.length) {
+      const completedPercent = subtaskList.filter((x) => x.isCompleted).length / subtaskList.length
+      onProgress?.(completedPercent)
+    }
+  }, [subtaskList, onProgress])
+
+  const handleUpdateSubtask = async (item: SubTask) => {
+    try {
+      await firestore().doc(`subtasks/${item.id}`).update({ isCompleted: !item.isCompleted })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleAddSubtask = async (payload: SubTask) => {
     try {
@@ -67,10 +84,16 @@ export const SubtaskList = ({ taskId }: SubtaskListProps) => {
 
       {subtaskList.map((item) => (
         <Card styles={{ marginBottom: 12 }} key={item.id}>
-          <Row>
-            <TickCircle variant="Bold" size={22} color={COLORS.success} />
-            <Space width={8} />
-            <AppText text={item.title} />
+          <Row onPress={() => handleUpdateSubtask(item)}>
+            <TickCircle
+              variant={item.isCompleted ? 'Bold' : 'Outline'}
+              size={22}
+              color={COLORS.success}
+            />
+            <View style={{ flex: 1, marginLeft: 12 }}>
+              <AppText text={item.title} />
+              <AppText size={12} text={dayjs(item.createdAt).format('DD MMM YYYY')} />
+            </View>
           </Row>
         </Card>
       ))}

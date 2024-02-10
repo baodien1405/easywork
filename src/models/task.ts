@@ -30,4 +30,6 @@ export interface SubTask {
   description: string
   isCompleted?: boolean
   taskId?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
