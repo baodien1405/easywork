@@ -1,7 +1,7 @@
+import firestore from '@react-native-firebase/firestore'
 import { AddSquare, TickCircle } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react'
-import { Alert, FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
-import firestore from '@react-native-firebase/firestore'
+import { Alert, Modal, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 import { AppText, Card, Row, Space, SubtaskForm, Title } from '@/components'
 import { COLORS } from '@/constants'
@@ -58,30 +58,22 @@ export const SubtaskList = ({ taskId }: SubtaskListProps) => {
 
   return (
     <>
-      <Row>
+      <Row styles={{ marginBottom: 12 }}>
         <Title text="Sub tasks" size={20} flex={1} />
         <TouchableOpacity onPress={() => setIsOpenModal(true)}>
           <AddSquare size={24} color={COLORS.success} variant="Bold" />
         </TouchableOpacity>
       </Row>
 
-      <Space height={12} />
-
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={subtaskList}
-        renderItem={({ item }) => {
-          return (
-            <Card styles={{ marginBottom: 12 }} key={item.id}>
-              <Row>
-                <TickCircle variant="Bold" size={22} color={COLORS.success} />
-                <Space width={8} />
-                <AppText text={item.title} />
-              </Row>
-            </Card>
-          )
-        }}
-      />
+      {subtaskList.map((item) => (
+        <Card styles={{ marginBottom: 12 }} key={item.id}>
+          <Row>
+            <TickCircle variant="Bold" size={22} color={COLORS.success} />
+            <Space width={8} />
+            <AppText text={item.title} />
+          </Row>
+        </Card>
+      ))}
 
       <Modal visible={isOpenModal} transparent animationType="slide">
         <View style={styles.modalContainer}>
