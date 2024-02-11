@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore'
 
 import { AppText, Container, Row, Section, SignUpForm, Space, Title } from '@/components'
 import { FONT_FAMILIES, SCREENS } from '@/constants'
@@ -9,8 +10,20 @@ import { SignUpPayload, SignUpScreenProps } from '@/models'
 export function SignUpScreen({ navigation }: SignUpScreenProps) {
   const handleSignUp = async (payload: SignUpPayload) => {
     try {
-      await auth().createUserWithEmailAndPassword(payload.email, payload.password)
-    } catch (error) {}
+      const credential = await auth().createUserWithEmailAndPassword(
+        payload.email,
+        payload.password
+      )
+      const user = credential.user
+      firestore()
+        .doc(`users/${user.uid}`)
+        .set({
+          email: user.email || '',
+          displayName: user.displayName || user.email
+        })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

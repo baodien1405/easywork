@@ -10,7 +10,9 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
   const handleLogin = async (payload: LoginPayload) => {
     try {
       await auth().signInWithEmailAndPassword(payload.email, payload.password)
-    } catch (error) {}
+    } catch (error) {
+      console.log('error:: ', error)
+    }
   }
 
   return (
