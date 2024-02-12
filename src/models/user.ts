@@ -5,4 +5,5 @@ export interface User {
   username: string
   website: string
   phone: string
+  displayName: string
 }

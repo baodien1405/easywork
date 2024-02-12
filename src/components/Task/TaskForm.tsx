@@ -40,7 +40,7 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
   const { data: userList } = useUserList()
 
   const memberOptions = userList.map((user) => ({
-    label: user.name,
+    label: user.displayName,
     value: user.id
   }))
 

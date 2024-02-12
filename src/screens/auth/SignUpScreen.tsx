@@ -19,7 +19,7 @@ export function SignUpScreen({ navigation }: SignUpScreenProps) {
         .doc(`users/${user.uid}`)
         .set({
           email: user.email || '',
-          displayName: user.displayName || user.email
+          displayName: user.displayName || payload.name
         })
     } catch (error) {
       console.log(error)
