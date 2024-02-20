@@ -6,4 +6,5 @@ export interface User {
   website: string
   phone: string
   displayName: string
+  avatarUrl: string
 }

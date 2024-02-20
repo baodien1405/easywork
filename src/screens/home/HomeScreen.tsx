@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
+import { ActivityIndicator } from 'react-native'
+import dayjs from 'dayjs'
 
 import {
   AppButton,
@@ -22,8 +24,6 @@ import {
 import { COLORS, FONT_FAMILIES, FORMAT_TYPES, SCREENS } from '@/constants'
 import { globalStyles } from '@/styles'
 import { HomeScreenProps, Task } from '@/models'
-import { ActivityIndicator } from 'react-native'
-import dayjs from 'dayjs'
 
 export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const user = auth().currentUser
@@ -35,8 +35,8 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
       setIsLoading(true)
       await firestore()
         .collection('tasks')
-        .orderBy('dueDate')
-        .limitToLast(3)
+        .where('uids', 'array-contains', user?.uid)
+        .limit(3)
         .onSnapshot((snap) => {
           if (snap.empty) return
 
@@ -54,7 +54,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }
 
     fetchTaskListAPI()
-  }, [])
+  }, [user?.uid])
 
   return (
     <View style={styles.flex1}>
@@ -128,7 +128,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     <AppText text={taskList[0].description} size={13} numberOfLines={4} />
 
                     <View style={{ marginVertical: 25 }}>
-                      <AvatarGroup />
+                      <AvatarGroup uids={taskList[0].uids} />
                       {taskList[0]?.progress !== undefined && (
                         <ProgressBar
                           percent={`${Math.round(taskList[0]?.progress * 100)}%`}
@@ -165,15 +165,22 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
+
                     <Title text={taskList[1].title} size={18} />
+
                     <AppText text={taskList[1].description} size={13} numberOfLines={3} />
-                    {taskList[1]?.progress !== undefined && (
-                      <ProgressBar
-                        percent={`${Math.round(taskList[1]?.progress * 100)}%`}
-                        color="#A2F068"
-                        size="large"
-                      />
-                    )}
+
+                    <View style={{ marginVertical: 25 }}>
+                      <AvatarGroup uids={taskList[1].uids} />
+
+                      {taskList[1]?.progress !== undefined && (
+                        <ProgressBar
+                          percent={`${Math.round(taskList[1]?.progress * 100)}%`}
+                          color="#A2F068"
+                          size="large"
+                        />
+                      )}
+                    </View>
                   </CardImage>
                 )}
 
@@ -192,15 +199,20 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
+
                     <Title text={taskList[2].title} size={18} />
                     <AppText text={taskList[2].description} size={13} numberOfLines={3} />
-                    {taskList[2]?.progress !== undefined && (
-                      <ProgressBar
-                        percent={`${Math.round(taskList[2]?.progress * 100)}%`}
-                        color="rgba(113, 77, 217, 0.9)"
-                        size="large"
-                      />
-                    )}
+
+                    <View style={{ marginVertical: 25 }}>
+                      <AvatarGroup uids={taskList[2].uids} />
+                      {taskList[2]?.progress !== undefined && (
+                        <ProgressBar
+                          percent={`${Math.round(taskList[2]?.progress * 100)}%`}
+                          color="rgba(113, 77, 217, 0.9)"
+                          size="large"
+                        />
+                      )}
+                    </View>
                   </CardImage>
                 )}
               </View>
