@@ -25,14 +25,17 @@ interface TaskFormProps {
 }
 
 export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
-  const schema = useTaskSchema()
+  const schema = useTaskSchema({ initialValues })
   const {
     control,
     handleSubmit,
     formState: { isSubmitting }
   } = useForm<Task>({
     defaultValues: {
-      ...initialValues
+      ...initialValues,
+      dueDate: initialValues?.dueDate ? (initialValues?.dueDate as any).toDate() : undefined,
+      start: initialValues?.start ? (initialValues?.start as any).toDate() : undefined,
+      end: initialValues?.end ? (initialValues?.end as any).toDate() : undefined
     },
     resolver: yupResolver(schema)
   })
@@ -45,14 +48,18 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
   }))
 
   const handleFormSubmit = async (formValues: Task) => {
-    const attachmentListPromiseList = formValues?.fileList?.map((file: DocumentPickerResponse) => {
-      return handleUploadFileToStorage(file)
-    })
+    if (formValues?.fileList) {
+      const attachmentListPromiseList = formValues?.fileList?.map(
+        (file: DocumentPickerResponse) => {
+          return handleUploadFileToStorage(file)
+        }
+      )
 
-    const attachmentList = await Promise.all(attachmentListPromiseList)
+      const attachmentList = await Promise.all(attachmentListPromiseList)
 
-    delete formValues.fileList
-    formValues.attachments = attachmentList
+      delete formValues.fileList
+      formValues.attachments = attachmentList
+    }
 
     await onSubmit?.(formValues)
   }
@@ -120,10 +127,15 @@ export function TaskForm({ initialValues, onSubmit }: TaskFormProps) {
         multiple
       />
 
-      <UploadFileField name="fileList" control={control} label="Attachments" />
+      <UploadFileField
+        name="fileList"
+        control={control}
+        label="Attachments"
+        fileNamePreview={initialValues?.attachments?.[0].name || ''}
+      />
 
       <AppButton
-        text="Add"
+        text={initialValues?.id ? 'Save' : 'Submit'}
         onPress={handleSubmit(handleFormSubmit)}
         loading={isSubmitting}
         styles={{ marginTop: 20 }}

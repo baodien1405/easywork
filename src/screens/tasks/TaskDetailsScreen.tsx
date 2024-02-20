@@ -1,7 +1,7 @@
 import { Slider } from '@miblanchard/react-native-slider'
 import firestore from '@react-native-firebase/firestore'
 import dayjs from 'dayjs'
-import { ArrowLeft2, CalendarEdit, Clock } from 'iconsax-react-native'
+import { ArrowLeft2, CalendarEdit, Clock, Edit2, TickSquare } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
@@ -19,7 +19,7 @@ import {
   Title
 } from '@/components'
 import { UploadFileField } from '@/components/FormFields'
-import { COLORS, FONT_FAMILIES } from '@/constants'
+import { COLORS, FONT_FAMILIES, SCREENS } from '@/constants'
 import { Task, TaskDetailsScreenProps } from '@/models'
 import { globalStyles } from '@/styles'
 import { convertFileSizeToMB, handleUploadFileToStorage } from '@/utils'
@@ -28,6 +28,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
   const { taskId, color = 'rgba(113, 77, 217, 0.9)' } = route.params
   const [task, setTask] = useState<Task | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isUrgent, setIsUrgent] = useState(false)
   const [progress, setProgress] = useState(0)
   const [fileList, setFileList] = useState<DocumentPickerResponse[]>([])
   const { control } = useForm()
@@ -55,6 +56,12 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
     }
   }, [task?.progress])
 
+  useEffect(() => {
+    if (task?.isUrgent) {
+      setIsUrgent(task.isUrgent || false)
+    }
+  }, [task?.isUrgent])
+
   if (!task) return <></>
 
   const handleUpdateTask = async () => {
@@ -68,6 +75,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
       const updateData: Task = {
         ...task,
         progress,
+        isUrgent: isUrgent,
         attachments: (task?.attachments || []).concat(attachmentList)
       }
 
@@ -76,7 +84,6 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
       Alert.alert('Update task success')
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
       setIsLoading(false)
     }
   }
@@ -92,14 +99,34 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
           borderBottomRightRadius: 20
         }}
       >
-        <Row justify="flex-start">
+        <Row justify="flex-start" styles={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <ArrowLeft2 size={24} color={COLORS.text} />
           </TouchableOpacity>
 
           <Space width={12} />
 
-          <Title text={task.title} />
+          <Title text={task.title} numberOfLines={1} flex={1} />
+
+          <Space width={12} />
+
+          <TouchableOpacity
+            style={{
+              height: 30,
+              width: 30,
+              borderRadius: 100,
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+            onPress={() =>
+              navigation.navigate(SCREENS.ADD_EDIT_TASK_SCREEN, {
+                taskId: taskId
+              })
+            }
+          >
+            <Edit2 size={16} color={COLORS.white1} />
+          </TouchableOpacity>
         </Row>
 
         <Space height={30} />
@@ -121,7 +148,7 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
             <AppText text={dayjs((task.dueDate as any).toDate()).format('DD MMM YYYY')} />
           </Row>
           <Row>
-            <AvatarGroup />
+            <AvatarGroup uids={task.uids} />
           </Row>
         </Row>
       </Section>
@@ -134,6 +161,14 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
         >
           <AppText text={task.description} />
         </Card>
+      </Section>
+
+      <Section>
+        <Row onPress={() => setIsUrgent((prevState) => !prevState)}>
+          <TickSquare variant={isUrgent ? 'Bold' : 'Outline'} size={24} color={COLORS.success} />
+          <Space width={8} />
+          <AppText text="isUrgent" flex={1} font={FONT_FAMILIES.semibold} size={18} />
+        </Row>
       </Section>
 
       <Section>

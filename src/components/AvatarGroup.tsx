@@ -8,7 +8,7 @@ interface AvatarGroupProps {
   uids: string[]
 }
 
-export function AvatarGroup({ uids }: AvatarGroupProps) {
+export function AvatarGroup({ uids = [] }: AvatarGroupProps) {
   return (
     <Row styles={styles.container}>
       {uids.map((item, index) => index < 3 && <Avatar uid={item} index={index} key={item} />)}

@@ -1,6 +1,11 @@
+import { Task } from '@/models'
 import * as yup from 'yup'
 
-export const useTaskSchema = () => {
+interface UseTaskSchemaProps {
+  initialValues?: Task
+}
+
+export const useTaskSchema = ({ initialValues }: UseTaskSchemaProps) => {
   const schema = yup.object().shape({
     title: yup.string().required('Please enter a title'),
     description: yup.string().required('Please enter a description'),
@@ -16,10 +21,8 @@ export const useTaskSchema = () => {
       .mixed()
       .nullable()
       .test('test-required', 'Please select a file', (value: any) => {
-        if (!Array.isArray(value) || value?.length === 0) {
-          return false
-        }
-        return true
+        if (Boolean(initialValues?.id) || Boolean(value)) return true
+        return false
       })
       .test('test-size', 'Maximum file exceeded. Please select another file', (value: any) => {
         const fileSize =

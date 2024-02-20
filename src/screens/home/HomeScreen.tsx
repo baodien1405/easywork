@@ -29,6 +29,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const user = auth().currentUser
   const [isLoading, setIsLoading] = useState(true)
   const [taskList, setTaskList] = useState<Task[]>([])
+  const urgentTaskList = taskList.filter((task) => task.isUrgent)
 
   useEffect(() => {
     const fetchTaskListAPI = async () => {
@@ -124,8 +125,8 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                     <TouchableOpacity style={globalStyles.iconContainer}>
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
-                    <Title text={taskList[0].title} />
-                    <AppText text={taskList[0].description} size={13} numberOfLines={4} />
+                    <Title text={taskList[0].title} size={18} numberOfLines={2} />
+                    <AppText text={taskList[0].description} size={13} numberOfLines={3} />
 
                     <View style={{ marginVertical: 25 }}>
                       <AvatarGroup uids={taskList[0].uids} />
@@ -166,7 +167,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
 
-                    <Title text={taskList[1].title} size={18} />
+                    <Title text={taskList[1].title} size={18} numberOfLines={2} />
 
                     <AppText text={taskList[1].description} size={13} numberOfLines={3} />
 
@@ -200,7 +201,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
                       <Edit2 size={20} color={COLORS.white1} />
                     </TouchableOpacity>
 
-                    <Title text={taskList[2].title} size={18} />
+                    <Title text={taskList[2].title} size={18} numberOfLines={2} />
                     <AppText text={taskList[2].description} size={13} numberOfLines={3} />
 
                     <View style={{ marginVertical: 25 }}>
@@ -224,14 +225,16 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
         <Section>
           <AppText text="Urgent tasks" flex={1} font={FONT_FAMILIES.bold} size={21} />
-          <Card>
-            <Row>
-              <Circular value={40} radius={36} />
-              <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 12 }}>
-                <AppText text="Title of task" />
-              </View>
-            </Row>
-          </Card>
+          {urgentTaskList.map((task) => (
+            <Card key={task.id} styles={{ marginTop: 12 }}>
+              <Row>
+                <Circular value={task.progress ? task.progress * 100 : 0} radius={36} />
+                <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 12 }}>
+                  <AppText text={task.title} />
+                </View>
+              </Row>
+            </Card>
+          ))}
         </Section>
       </Container>
 

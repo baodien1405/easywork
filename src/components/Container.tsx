@@ -1,12 +1,18 @@
 import { ArrowLeft2 } from 'iconsax-react-native'
 import React, { ReactNode } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { COLORS, FONT_FAMILIES } from '@/constants'
 import { globalStyles } from '@/styles'
-import { AppText } from './AppText'
-import { Row } from './Row'
+import { AppText, Row } from '@/components'
 
 interface ContainerProps {
   title?: string
@@ -55,6 +61,7 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
     paddingBottom: 16,
+    paddingTop: Platform.OS === 'android' ? 16 : 0,
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -11,6 +11,7 @@ interface TitleProps {
   color?: string
   styles?: StyleProp<TextStyle>
   flex?: number
+  numberOfLines?: number
 }
 
 export function Title({
@@ -19,7 +20,18 @@ export function Title({
   color = COLORS.text,
   font = FONT_FAMILIES.semibold,
   styles,
-  flex = 0
+  flex = 0,
+  numberOfLines
 }: TitleProps) {
-  return <AppText text={text} size={size} color={color} font={font} styles={styles} flex={flex} />
+  return (
+    <AppText
+      text={text}
+      size={size}
+      color={color}
+      font={font}
+      styles={styles}
+      flex={flex}
+      numberOfLines={numberOfLines}
+    />
+  )
 }

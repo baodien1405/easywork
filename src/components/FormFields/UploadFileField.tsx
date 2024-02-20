@@ -8,6 +8,7 @@ import { AppText, Row, Space, Title } from '@/components'
 import { COLORS } from '@/constants'
 
 type UploadFileFieldProps<T extends FieldValues> = {
+  fileNamePreview?: string
   label?: string
   multiple?: boolean
   name: Path<T>
@@ -16,6 +17,7 @@ type UploadFileFieldProps<T extends FieldValues> = {
 }
 
 export function UploadFileField<T extends FieldValues>({
+  fileNamePreview,
   label,
   name,
   control,
@@ -30,6 +32,10 @@ export function UploadFileField<T extends FieldValues>({
   })
 
   const fileNameList: string[] = value?.map((file: DocumentPickerResponse) => file.name) || []
+
+  if (fileNamePreview) {
+    fileNameList.push(fileNamePreview)
+  }
 
   const handlePickerDocument = () => {
     DocumentPicker.pick({

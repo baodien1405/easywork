@@ -140,10 +140,7 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 0,
-    padding: 0,
-    marginVertical: 6,
-    flex: 1,
-    textAlignVertical: 'top'
+    padding: 0
   },
   errorMessage: {
     marginTop: 8

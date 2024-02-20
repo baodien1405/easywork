@@ -22,6 +22,7 @@ export interface Task {
   fileList?: any
   attachments?: Attachment[]
   progress?: number
+  isUrgent?: boolean
 }
 
 export interface SubTask {
