@@ -23,6 +23,8 @@ export interface Task {
   attachments?: Attachment[]
   progress?: number
   isUrgent?: boolean
+  createdAt?: number
+  updatedAt?: number
 }
 
 export interface SubTask {

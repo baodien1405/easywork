@@ -24,7 +24,8 @@ export function Circular({ color = COLORS.blue, radius = 46, value }: CircularPr
       inActiveStrokeWidth={14}
       titleFontSize={20}
       titleStyle={{
-        fontFamily: FONT_FAMILIES.medium
+        fontFamily: FONT_FAMILIES.medium,
+        fontSize: 18
       }}
     />
   )

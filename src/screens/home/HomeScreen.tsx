@@ -30,6 +30,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [taskList, setTaskList] = useState<Task[]>([])
   const urgentTaskList = taskList.filter((task) => task.isUrgent)
+  const completedTaskList = taskList.filter((task) => task.progress === 1)
 
   useEffect(() => {
     const fetchTaskListAPI = async () => {
@@ -37,7 +38,6 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
       await firestore()
         .collection('tasks')
         .where('uids', 'array-contains', user?.uid)
-        .limit(3)
         .onSnapshot((snap) => {
           if (snap.empty) return
 
@@ -92,16 +92,16 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
             <Row>
               <View style={styles.flex1}>
                 <Title text="Task progress" />
-                <AppText text="30/40 tasks done" />
+                <AppText text={`${completedTaskList.length}/${taskList.length} tasks done`} />
                 <Space height={12} />
 
                 <Row justify="flex-start">
-                  <Tag text="March 22" onPress={() => {}} />
+                  <Tag text={dayjs(new Date()).format('MMM DD')} onPress={() => {}} />
                 </Row>
               </View>
 
               <View>
-                <Circular value={80} />
+                <Circular value={(completedTaskList.length / taskList.length) * 100} />
               </View>
             </Row>
           </Card>
@@ -226,9 +226,13 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
         <Section>
           <AppText text="Urgent tasks" flex={1} font={FONT_FAMILIES.bold} size={21} />
           {urgentTaskList.map((task) => (
-            <Card key={task.id} styles={{ marginTop: 12 }}>
+            <Card
+              key={task.id}
+              styles={{ marginTop: 12 }}
+              onPress={() => navigation.navigate(SCREENS.TASK_DETAILS_SCREEN, { taskId: task.id })}
+            >
               <Row>
-                <Circular value={task.progress ? task.progress * 100 : 0} radius={36} />
+                <Circular value={task.progress ? task.progress * 100 : 0} radius={40} />
                 <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 12 }}>
                   <AppText text={task.title} />
                 </View>

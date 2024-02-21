@@ -16,7 +16,7 @@ interface SubtaskFormProps {
 }
 
 export function SubtaskForm({ initialValues, onCancel, onSubmit }: SubtaskFormProps) {
-  const schema = useTaskSchema()
+  const schema = useTaskSchema({})
   const { control, handleSubmit } = useForm<SubTask>({
     defaultValues: {
       ...initialValues

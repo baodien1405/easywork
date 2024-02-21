@@ -1,5 +1,12 @@
 import React, { ReactNode } from 'react'
-import { ActivityIndicator, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import {
+  ActivityIndicator,
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native'
 
 import { AppText, Row } from '@/components'
 import { COLORS, FONT_FAMILIES } from '@/constants'
@@ -10,6 +17,7 @@ interface AppButtonProps {
   color?: string
   loading?: boolean
   styles?: StyleProp<ViewStyle>
+  textStyles?: StyleProp<TextStyle>
   prefix?: ReactNode
   suffix?: ReactNode
   onPress: () => void
@@ -22,7 +30,8 @@ export function AppButton({
   loading,
   styles,
   prefix,
-  suffix
+  suffix,
+  textStyles
 }: AppButtonProps) {
   return (
     <TouchableOpacity
@@ -45,7 +54,13 @@ export function AppButton({
       ) : (
         <Row>
           {prefix && <View>{prefix}</View>}
-          <AppText text={text} flex={0} size={16} font={FONT_FAMILIES.semibold} />
+          <AppText
+            text={text}
+            flex={0}
+            size={16}
+            font={FONT_FAMILIES.semibold}
+            styles={textStyles}
+          />
           {suffix && <View>{suffix}</View>}
         </Row>
       )}

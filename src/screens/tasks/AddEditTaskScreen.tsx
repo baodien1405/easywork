@@ -32,9 +32,20 @@ export function AddEditTaskScreen({ navigation, route }: AddEditTaskScreenProps)
   const handleTaskSubmit = async (payload: Task) => {
     try {
       if (isAddMode) {
-        await firestore().collection('tasks').add(payload)
+        await firestore()
+          .collection('tasks')
+          .add({
+            ...payload,
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          })
       } else {
-        await firestore().doc(`tasks/${taskId}`).update(payload)
+        await firestore()
+          .doc(`tasks/${taskId}`)
+          .update({
+            ...payload,
+            updatedAt: Date.now()
+          })
       }
       navigation.goBack()
     } catch (error) {

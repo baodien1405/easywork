@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { ArrowLeft2, CalendarEdit, Clock, Edit2, TickSquare } from 'iconsax-react-native'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert, ScrollView, TouchableOpacity, View } from 'react-native'
+import { Alert, Platform, ScrollView, TouchableOpacity, View } from 'react-native'
 import { DocumentPickerResponse } from 'react-native-document-picker'
 
 import {
@@ -88,13 +88,36 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
     }
   }
 
+  const handleDeleteTask = () => {
+    Alert.alert('Confirm', `Are you sure to delete task ${task.title}`, [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+        onPress: () => {}
+      },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: () => {
+          firestore()
+            .doc(`tasks/${task.id}`)
+            .delete()
+            .then(() => {
+              navigation.goBack()
+            })
+            .catch((error) => console.log(error))
+        }
+      }
+    ])
+  }
+
   return (
     <ScrollView style={(globalStyles.flex1, { backgroundColor: COLORS.bgColor })}>
       <Section
         styles={{
           backgroundColor: color,
           paddingBottom: 18,
-          paddingTop: 60,
+          paddingTop: Platform.OS === 'ios' ? 60 : 40,
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20
         }}
@@ -249,6 +272,16 @@ export function TaskDetailsScreen({ navigation, route }: TaskDetailsScreenProps)
 
       <Section>
         <AppButton text="Update" onPress={handleUpdateTask} color="#3618e0" loading={isLoading} />
+      </Section>
+
+      <Section>
+        <AppButton
+          text="Delete"
+          onPress={handleDeleteTask}
+          color="transparent"
+          textStyles={{ color: 'red' }}
+          loading={isLoading}
+        />
       </Section>
     </ScrollView>
   )
