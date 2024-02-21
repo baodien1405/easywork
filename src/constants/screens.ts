@@ -3,5 +3,6 @@ export const SCREENS = {
   SIGN_UP_SCREEN: 'SignUpScreen',
   HOME_SCREEN: 'HomeScreen',
   ADD_EDIT_TASK_SCREEN: 'AddEditTaskScreen',
-  TASK_DETAILS_SCREEN: 'TaskDetailsScreen'
+  TASK_DETAILS_SCREEN: 'TaskDetailsScreen',
+  TASK_LIST_SCREEN: 'TaskListScreen'
 } as const

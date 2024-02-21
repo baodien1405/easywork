@@ -106,7 +106,10 @@ export function InputField<T extends FieldValues>({
 
         {allowClear && value && (
           <TouchableOpacity
-            onPress={() => onChange('')}
+            onPress={() => {
+              onChange('')
+              externalOnChangeText?.('')
+            }}
             style={{ marginTop: multiline && numberOfLines ? 10 : 0 }}
           >
             <AntDesign name="close" size={20} color={COLORS.white1} />

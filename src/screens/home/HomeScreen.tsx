@@ -81,7 +81,10 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </Section>
 
         <Section>
-          <Row styles={[globalStyles.inputContainer]} onPress={() => {}}>
+          <Row
+            styles={[globalStyles.inputContainer]}
+            onPress={() => navigation.navigate(SCREENS.TASK_LIST_SCREEN)}
+          >
             <AppText color="#696B6F" text="Search tasks" />
             <SearchNormal1 size={20} color={COLORS.desc} />
           </Row>
@@ -89,7 +92,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
         <Section>
           <Card>
-            <Row>
+            <Row onPress={() => navigation.navigate(SCREENS.TASK_LIST_SCREEN)}>
               <View style={styles.flex1}>
                 <Title text="Task progress" />
                 <AppText text={`${completedTaskList.length}/${taskList.length} tasks done`} />
@@ -101,7 +104,7 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
               </View>
 
               <View>
-                <Circular value={(completedTaskList.length / taskList.length) * 100} />
+                <Circular value={Math.floor((completedTaskList.length / taskList.length) * 100)} />
               </View>
             </Row>
           </Card>

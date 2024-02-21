@@ -5,6 +5,8 @@ export type AddEditTaskScreenProps = NativeStackScreenProps<RootStackParamList, 
 
 export type TaskDetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'TaskDetailsScreen'>
 
+export type TaskListScreenProps = NativeStackScreenProps<RootStackParamList, 'TaskListScreen'>
+
 interface Attachment {
   name: string
   size: number
